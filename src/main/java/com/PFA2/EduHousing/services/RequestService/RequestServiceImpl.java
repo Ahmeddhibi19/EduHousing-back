@@ -229,15 +229,70 @@ public class RequestServiceImpl implements RequestService{
 
     @Override
     public Requestdto update(Requestdto requestdto) {
-        return null;
+        if (requestdto.getId()==null){
+            log.error("new request id is null");
+            return null;
+        }
+        Request request=requestRepository.findById(requestdto.getId()).orElseThrow(
+                ()->new EntityNotFoundException("no request with this id :"+requestdto.getId(),
+                        ErrorCodes.REQUEST_NOT_FOUND)
+        );
+        request.setContent(
+                requestdto.getContent()!=null?
+                        requestdto.getContent(): request.getContent()
+                );
+        return Requestdto.fromEntity(requestRepository.save(request));
     }
 
     @Override
     public void deleteById(Integer id) {
+        if (id==null){
+            log.error("request id is null");
+            return;
+        }
+        Request request=requestRepository.findById(id).orElseThrow(
+                ()->new EntityNotFoundException("no request with this id :"+id,
+                        ErrorCodes.REQUEST_NOT_FOUND)
+        );
+        if(request.getStatus()==Status.ACCEPTED || request.getStatus()==Status.VALIDATED){
+            log.error("cannot delete accepted or validated requests {}",request);
+            throw new InvalidEntityException("cannot delete accepted or validated requests",
+                    ErrorCodes.COULD_NOT_DELETE_VALIDATED_OR_ACCEPTED_REQUEST);
+        }
+        requestRepository.delete(request);
 
     }
 
-    @Scheduled(fixedRate = 60000)
+    @Override
+    public void rejectRequest(Integer requestId,Integer rentalDetailsId) {
+        if (requestId==null){
+            log.error("request Id is null");
+            return;
+        }
+        if (rentalDetailsId==null){
+            log.error("rental Details Id is null");
+            return;
+        }
+        Request request=requestRepository.findById(requestId).orElseThrow(
+                ()->new EntityNotFoundException("no request with this id :"+requestId,
+                        ErrorCodes.REQUEST_NOT_FOUND)
+        );
+        RentalDetails rentalDetails=rentalDetailsRepository.findById(rentalDetailsId).orElseThrow(
+                ()->new EntityNotFoundException("no rental details with this id :"+rentalDetailsId,
+                        ErrorCodes.RENTAL_DETAILS_NOT_FOUND)
+        );
+        if(request.getStatus()!=Status.ACCEPTED && request.getStatus()!=Status.VALIDATED){
+            request.setStatus(Status.REJECTED);
+            requestRepository.save(request);
+        }else {
+            log.error("cannot reject accepted or validated requests {}",request);
+            throw new InvalidEntityException("cannot reject accepted or validated requests",
+                    ErrorCodes.CANNOT_REJECT_VALIDATED_OR_ACCEPTED_REQUESTS);
+        }
+
+    }
+
+   /* @Scheduled(fixedRate = 60000)
     public void cleanupRequests(){
         Instant now = Instant.now();
         List<Request> requestsToRemove = requestRepository.findAll().stream()
@@ -254,5 +309,5 @@ public class RequestServiceImpl implements RequestService{
             requestRepository.delete(request);
             log.info("Request with ID {} removed after acceptance delay", request.getId());
         }
-    }
+    }*/
 }

@@ -18,6 +18,7 @@ public interface RequestService {
     public void validateRequest(Integer requestId);
     public Requestdto update(Requestdto requestdto);
     public void deleteById(Integer id);
+    public void rejectRequest(Integer requestId,Integer rentalDetailsId);
 
 
 }

@@ -21,7 +21,7 @@ public class Request extends AbstractEntity{
     @Column(name = "content")
     private String content;
 
-    @Column(name = "status", insertable = false, updatable = false)
+    @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private Status status;
 
@@ -33,7 +33,7 @@ public class Request extends AbstractEntity{
     @CreatedDate
     private Instant validationTime;
 
-    @Column(name = "acceptance_delay")
+    @Column(name = "acceptance_delay",nullable = true)
     private Instant acceptanceDelay ;
 
     @ManyToOne

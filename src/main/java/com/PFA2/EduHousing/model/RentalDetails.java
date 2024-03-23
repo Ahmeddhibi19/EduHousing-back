@@ -3,10 +3,7 @@ package com.PFA2.EduHousing.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @Builder
@@ -34,10 +31,15 @@ public class RentalDetails extends AbstractEntity{
 
 
 
-    @OneToMany(mappedBy = "rentalDetails", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "rentalDetails", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private Set<Request> requestSet= new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "aprtment_id",nullable = false)
     private Apartment apartment;
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(monthlyAmount, startDate, endDate, description, isCurrent, apartment);
+    }
 }

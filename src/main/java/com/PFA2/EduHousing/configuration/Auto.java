@@ -1,8 +1,10 @@
 package com.PFA2.EduHousing.configuration;
 
+import com.PFA2.EduHousing.model.Apartment;
 import com.PFA2.EduHousing.model.RentalDetails;
 import com.PFA2.EduHousing.model.Request;
 import com.PFA2.EduHousing.model.Status;
+import com.PFA2.EduHousing.repository.ApartmentRepository;
 import com.PFA2.EduHousing.repository.RentalDetailsRepository;
 import com.PFA2.EduHousing.repository.RequestRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -22,13 +24,16 @@ import java.util.stream.Collectors;
 public class Auto {
     private final RequestRepository requestRepository;
     private final RentalDetailsRepository rentalDetailsRepository;
+    private final ApartmentRepository apartmentRepository;
     @Autowired
     public Auto(
             RequestRepository requestRepository,
-            RentalDetailsRepository rentalDetailsRepository
+            RentalDetailsRepository rentalDetailsRepository,
+            ApartmentRepository apartmentRepository
     ){
         this.requestRepository=requestRepository;
         this.rentalDetailsRepository=rentalDetailsRepository;
+        this.apartmentRepository= apartmentRepository;
     }
     @Scheduled(fixedRate = 60000)
     public void cleanupRequests(){
@@ -55,11 +60,31 @@ public class Auto {
                 .filter(rentalDetails ->
                         rentalDetails.getRequestSet().stream()
                                 .noneMatch(request -> request.getStatus() == Status.VALIDATED || request.getStatus()==Status.ACCEPTED)
-                                && rentalDetails.getStartDate().before(currentDate))
+                                && rentalDetails.getStartDate().before(currentDate) && rentalDetails.getIsCurrent())
                 .collect(Collectors.toList());
         for (RentalDetails rentalDetails:rentalDetailsToRemove){
             rentalDetailsRepository.delete(rentalDetails);
             log.info("rental Details with ID {} removed due to non acceptance or validation", rentalDetails.getId());
+        }
+    }
+    @Scheduled(fixedRate = 60000)
+    public void rentalStatusUpdate(){
+        Date currentDate=  Calendar.getInstance().getTime();
+        List<RentalDetails> rentalDetailsToUpdate = rentalDetailsRepository.findAll().stream()
+                .filter(rentalDetails -> rentalDetails.getEndDate().before(currentDate) && rentalDetails.getRequestSet().stream()
+                        .anyMatch(request -> request.getStatus()==Status.VALIDATED)
+
+
+                )
+                .collect(Collectors.toList());
+        for (RentalDetails rentalDetails:rentalDetailsToUpdate){
+            if (rentalDetails.getIsCurrent()){
+                rentalDetails.setIsCurrent(false);
+                Apartment apartment=rentalDetails.getApartment();
+                apartment.setIsRented(false);
+                apartmentRepository.save(apartment);
+                rentalDetailsRepository.save(rentalDetails);
+            }
         }
     }
 }

@@ -12,6 +12,7 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Builder
 @Data
@@ -23,10 +24,10 @@ public class Citydto {
 
     private String postalCode;
 
-    @JsonIgnore
+
     private List<Apartmentdto> apartments = new ArrayList<>();
 
-    @JsonIgnore
+
     private List<Collegedto> colleges = new ArrayList<>();
 
     public static Citydto fromEntity(City city){
@@ -37,6 +38,18 @@ public class Citydto {
                 .id(city.getId())
                 .name(city.getName())
                 .postalCode(city.getPostalCode())
+                .apartments(
+                        city.getApartmentList()!=null?
+                                city.getApartmentList().stream()
+                                        .map(Apartmentdto::fromEntity)
+                                        .collect(Collectors.toList()) : null
+                )
+                .colleges(
+                        city.getCollegeList()!=null?
+                                city.getCollegeList().stream()
+                                        .map(Collegedto::fromEntity)
+                                        .collect(Collectors.toList()) : null
+                )
                 .build();
     }
 
@@ -45,7 +58,7 @@ public class Citydto {
             return  null;
         }
         City city=new City();
-        city.setId(citydto.getId());
+        //city.setId(citydto.getId());
         city.setName(citydto.getName());
         city.setPostalCode(citydto.getPostalCode());
         return city;

@@ -8,12 +8,14 @@ import com.PFA2.EduHousing.exceptions.InvalidEntityException;
 import com.PFA2.EduHousing.model.*;
 import com.PFA2.EduHousing.repository.*;
 import com.PFA2.EduHousing.validator.ApartmentValidator;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +44,7 @@ public class ApartmentServiceImpl implements ApartmentService{
         this.collegeRepository=collegeRepository;
     }
     @Override
+    @Transactional
     public Apartmentdto save(Apartmentdto apartmentdto, Integer homeownerId,Integer cityId) {
         Homeowner homeowner=homeownerRepository.findById(homeownerId).orElseThrow(
                 ()->new EntityNotFoundException("No Homeowner with the provided id :"+homeownerId+"is found",
@@ -59,11 +62,11 @@ public class ApartmentServiceImpl implements ApartmentService{
         List<College> collegeList=collegeRepository.findAll().stream().toList();
         Apartment apartment=Apartmentdto.toEntity(apartmentdto);
         apartment.setCity(city);
-        city.getApartmentList().add(apartment);
-        cityRepository.save(city);
         apartment.setHomeowner(homeowner);
+        city.getApartmentList().add(apartment);
+        apartment.setIsRented(false);
+        //apartment.setCreationTime(Instant.now());
         homeowner.getApartmentList().add(apartment);
-        homeownerRepository.save(homeowner);
         if(!collegeList.isEmpty()){
             for (College college:collegeList){
                 BigDecimal distance= Distancedto.calculateDistance(
@@ -80,6 +83,8 @@ public class ApartmentServiceImpl implements ApartmentService{
                 distanceRepository.save(dis);
             }
         }
+        cityRepository.save(city);
+        homeownerRepository.save(homeowner);
 
         return Apartmentdto.fromEntity(apartmentRepository.save(apartment));
     }
@@ -122,7 +127,7 @@ public class ApartmentServiceImpl implements ApartmentService{
         Optional<Homeowner> homeowner =homeownerRepository.findById(homeownerId);
         if(homeowner.isEmpty()){
             log.error("no homeowner with this id");
-            throw new EntityNotFoundException("no city with this id :"+homeownerId,ErrorCodes.HOMEOWNER_NOT_FOUND);
+            throw new EntityNotFoundException("no apartment with this homeowner id :"+homeownerId,ErrorCodes.HOMEOWNER_NOT_FOUND);
         }
         return apartmentRepository.findAllByHomeownerId(homeownerId).stream()
                 .map(Apartmentdto::fromEntity)
@@ -240,15 +245,9 @@ public class ApartmentServiceImpl implements ApartmentService{
                         apartmentdto.getAddress() : existingApartment.getAddress()
         );
 
-        existingApartment.setIsRented(
-                apartmentdto.getIsRented()!=null ?
-                        apartmentdto.getIsRented():existingApartment.getIsRented()
-        );
 
-        existingApartment.setRating(
-                apartmentdto.getRating()!=null && apartmentdto.getRating()<=10 && apartmentdto.getRating()>=0?
-                        apartmentdto.getRating() : existingApartment.getRating()
-        );
+
+
 
         existingApartment.setDescription(
                 StringUtils.hasLength(apartmentdto.getDescription())?
@@ -347,6 +346,12 @@ public class ApartmentServiceImpl implements ApartmentService{
                 ()->new EntityNotFoundException("no college with this id :"+collegeId,ErrorCodes.COLLEGE_NOT_FOUND)
         );
         return apartmentRepository.findApartmentsByCollegeAndCityAndDistanceLessThan(collegeId,distanceValue).stream()
+                .map(Apartmentdto::fromEntity)
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<Apartmentdto> findAll(){
+        return apartmentRepository.findAll().stream()
                 .map(Apartmentdto::fromEntity)
                 .collect(Collectors.toList());
     }

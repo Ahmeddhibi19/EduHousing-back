@@ -11,6 +11,10 @@ import lombok.*;
 @Entity
 @Table(name = "apartment_image")
 public class ApartmentImage extends AbstractEntity{
+    @Column(name = "name")
+    private String name;
+    @Column(name = "type")
+    private String type;
 
     @Lob
     @Column(name = "data", columnDefinition = "LONGBLOB")

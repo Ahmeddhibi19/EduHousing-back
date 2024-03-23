@@ -1,5 +1,6 @@
 package com.PFA2.EduHousing.dto;
 
+import com.PFA2.EduHousing.Utils.ImageUtils;
 import com.PFA2.EduHousing.model.Admin;
 import com.PFA2.EduHousing.model.Roles;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -27,7 +28,6 @@ public class Admindto  {
 
     private Boolean isActivated;
 
-    @JsonIgnore
     private ProfileImagedto profileImage;
 
     public static Admindto fromEntity(Admin admin){
@@ -43,6 +43,14 @@ public class Admindto  {
                 .phoneNumber(admin.getPhoneNumber())
                 .role(admin.getRole())
                 .isActivated(admin.getIsActivated())
+                .profileImage(
+                        ProfileImagedto.builder()
+                                .id(admin.getProfileImage().getId())
+                                .type(admin.getProfileImage().getType())
+                                .name(admin.getProfileImage().getName())
+                                .data(ImageUtils.decompressImage(admin.getProfileImage().getData()))
+                                .build()
+                )
                 .build();
     }
 
@@ -60,6 +68,7 @@ public class Admindto  {
         admin.setPhoneNumber(admindto.getPhoneNumber());
         admin.setIsActivated(admindto.getIsActivated());
         admin.setRole(admindto.getRole());
+        admin.setProfileImage(ProfileImagedto.toEntity(admindto.getProfileImage()));
 
         return admin;
     }

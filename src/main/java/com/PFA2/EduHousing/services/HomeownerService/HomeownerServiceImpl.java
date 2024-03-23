@@ -144,8 +144,6 @@ public class HomeownerServiceImpl implements HomeownerService{
        existingHomeowner.setPhoneNumber(StringUtils.hasLength(homeownerdto.getPhoneNumber())?
                homeownerdto.getPhoneNumber() : existingHomeowner.getPhoneNumber());
 
-       existingHomeowner.setPassword(StringUtils.hasLength(homeownerdto.getPassword())?
-               homeownerdto.getPassword() : existingHomeowner.getPassword());
 
        Homeowner updatedHomeowner= homeownerRepository.save(existingHomeowner);
 

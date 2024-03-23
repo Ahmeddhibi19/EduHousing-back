@@ -35,4 +35,7 @@ public class User extends AbstractEntity{
 
     @OneToOne(mappedBy = "user")
     private ProfileImage profileImage;
+
+    @OneToOne(mappedBy = "user")
+    private ApplicationFeedback applicationFeedback;
 }

@@ -1,6 +1,8 @@
 package com.PFA2.EduHousing.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 
 @Data
@@ -16,15 +18,13 @@ public class ApplicationFeedback extends AbstractEntity{
     private String content;
 
     @Column(name = "rating")
+    @Min(0)
+    @Max(10)
     private Integer rating;
 
-    @OneToOne(optional = false)
-    @JoinColumn(name = "homeowner_id")
-    private Homeowner homeowner;
-
-    @OneToOne(optional = false)
-    @JoinColumn(name = "student_id")
-    private Student student;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
 
 }

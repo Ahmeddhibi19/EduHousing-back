@@ -18,7 +18,7 @@ public interface RentalDetailsRepository extends JpaRepository<RentalDetails,Int
     @Query("select r from RentalDetails r where r.startDate >=:val and r.isCurrent=true ")
     public List<RentalDetails> findRentalByStartDate(Date val);
 
-    @Query("select r from RentalDetails  r where r.isCurrent=false And r.apartment.id=:apartmentId")
+    @Query("select rd from RentalDetails  rd join rd.requestSet r where rd.isCurrent=false And rd.apartment.id=:apartmentId and r.status='VALIDATED'")
     public List<RentalDetails> getRentalHistoryByApartment(Integer apartmentId);
 
     @Query("SELECT rd FROM RentalDetails rd JOIN rd.requestSet r WHERE r.status = 'VALIDATED' and r.student.id=:studentId and rd.apartment.id = :apartmentId")

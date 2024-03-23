@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.Objects;
 
 @Data
 @Builder
@@ -36,6 +37,7 @@ public class Request extends AbstractEntity{
     @Column(name = "acceptance_delay",nullable = true)
     private Instant acceptanceDelay ;
 
+
     @ManyToOne
     @JoinColumn(name = "rental_details_id",nullable = false)
     private RentalDetails rentalDetails;
@@ -43,10 +45,14 @@ public class Request extends AbstractEntity{
     @Column(name = "validation_delay",nullable = true)
     private Instant validationDelay ;
 
+
     @ManyToOne
     @JoinColumn(name = "student_id",nullable = false)
     private Student student;
 
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(content, status, acceptanceTime, validationTime, acceptanceDelay, rentalDetails, validationDelay);
+    }
 
 }

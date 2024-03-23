@@ -30,6 +30,7 @@ public interface ApartmentService {
     public List<Apartmentdto> findApartmentsByCollegeAndSameCity(Integer collegeId);
     public List<Apartmentdto> findApartmentsByCollegeAndDistanceLessThan(Integer collegeId, BigDecimal distanceValue);
     public List<Apartmentdto> findApartmentsByCollegeAndCityAndDistanceLessThan(Integer collegeId, BigDecimal distanceValue);
+    public List<Apartmentdto> findAll();
 
 
 }

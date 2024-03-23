@@ -20,6 +20,5 @@ public class Homeowner extends User{
     @OneToMany(mappedBy = "homeowner", cascade = CascadeType.ALL)
     private List<Apartment> apartmentList = new ArrayList<>();
 
-    @OneToOne(mappedBy = "homeowner")
-    private ApplicationFeedback applicationFeedback;
+
 }

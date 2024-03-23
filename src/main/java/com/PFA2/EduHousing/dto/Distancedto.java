@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -22,10 +23,10 @@ public class Distancedto {
 
     private BigDecimal distanceValue;
 
-    @JsonIgnore
+
     private Apartmentdto apartment;
 
-    @JsonIgnore
+
     private Collegedto college;
 
     public static  Distancedto fromEntity(Distance distance){
@@ -35,7 +36,36 @@ public class Distancedto {
         return Distancedto.builder()
                 .id(distance.getId())
                 .distanceValue(distance.getDistanceValue())
+                .apartment(
+                        Apartmentdto.builder()
+                                .id(distance.getApartment().getId())
+                                .longitude(distance.getApartment().getLongitude())
+                                .address(distance.getApartment().getAddress())
+                                .latitude(distance.getApartment().getLatitude())
+                                .isRented(distance.getApartment().getIsRented())
+                                .images(distance.getApartment().getImageList().stream().map(ApartmentImagedto::fromEntity).collect(Collectors.toList()))
+                                .rating(distance.getApartment().getRating())
+                                .rentalDetails(distance.getApartment().getRentalDetailsList().stream().map(RentalDetailsdto::fromEntity).collect(Collectors.toList()))
+                                .type(distance.getApartment().getType())
+                                .build()
+                )
+                .college(
+                        Collegedto.builder()
+                                .id(distance.getCollege().getId())
+                                .name(distance.getCollege().getName())
+                                .address(distance.getCollege().getAddress())
+                                .latitude(distance.getCollege().getLatitude())
+                                .longitude(distance.getCollege().getLongitude())
+                                .city(Citydto.builder()
+                                        .id(distance.getCollege().getCity().getId())
+                                        .name(distance.getCollege().getCity().getName())
+                                        .postalCode(distance.getCollege().getCity().getPostalCode())
+                                        .build()
+                                )
+                                .build()
+                )
                 .build();
+
     }
 
     public static Distance toEntity(Distancedto distancedto){
@@ -45,6 +75,8 @@ public class Distancedto {
         Distance distance = new Distance();
         distance.setId(distancedto.getId());
         distance.setDistanceValue(distancedto.getDistanceValue());
+        distance.setApartment(Apartmentdto.toEntity(distancedto.getApartment()));
+        distance.setCollege(Collegedto.toEntity(distancedto.getCollege()));
         return distance;
     }
 

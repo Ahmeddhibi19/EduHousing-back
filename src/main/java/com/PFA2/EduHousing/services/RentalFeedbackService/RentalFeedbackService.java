@@ -13,4 +13,6 @@ public interface RentalFeedbackService {
     public List<RentalFeedbackdto> findAllByApartmentId(Integer apartmentId);
     public List<RentalFeedbackdto> getRentalFeedbackByApartmentIdAndRatingLessThan(Integer apartmentId,Integer value);
     public List<RentalFeedbackdto> getRentalFeedbackByApartmentIdAndRatingGreaterThan(Integer apartmentId,Integer value);
+    public void deleteById(Integer id);
+    public RentalFeedbackdto update(RentalFeedbackdto rentalFeedbackdto);
 }

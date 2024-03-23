@@ -4,14 +4,13 @@ import com.PFA2.EduHousing.dto.Requestdto;
 import com.PFA2.EduHousing.exceptions.EntityNotFoundException;
 import com.PFA2.EduHousing.exceptions.ErrorCodes;
 import com.PFA2.EduHousing.exceptions.InvalidEntityException;
-import com.PFA2.EduHousing.model.RentalDetails;
-import com.PFA2.EduHousing.model.Request;
-import com.PFA2.EduHousing.model.Status;
-import com.PFA2.EduHousing.model.Student;
+import com.PFA2.EduHousing.model.*;
+import com.PFA2.EduHousing.repository.ApartmentRepository;
 import com.PFA2.EduHousing.repository.RentalDetailsRepository;
 import com.PFA2.EduHousing.repository.RequestRepository;
 import com.PFA2.EduHousing.repository.StudentRepository;
 import com.PFA2.EduHousing.validator.RequestValidator;
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -30,48 +29,62 @@ public class RequestServiceImpl implements RequestService{
     private final RequestRepository requestRepository;
     private final StudentRepository studentRepository;
     private final RentalDetailsRepository rentalDetailsRepository;
+    private final ApartmentRepository apartmentRepository;
+    private final EntityManager entityManager;
     @Autowired
     public RequestServiceImpl(
             RequestRepository requestRepository,
             StudentRepository studentRepository,
-            RentalDetailsRepository rentalDetailsRepository
+            RentalDetailsRepository rentalDetailsRepository,
+            ApartmentRepository apartmentRepository,
+            EntityManager entityManager
     ){
         this.requestRepository=requestRepository;
         this.rentalDetailsRepository=rentalDetailsRepository;
         this.studentRepository=studentRepository;
+        this.apartmentRepository=apartmentRepository;
+        this.entityManager=entityManager;
     }
 
 
 
     @Override
     public Requestdto save(Requestdto requestdto, Integer studentId, Integer rentalDetailsId) {
-        List<String> errors= RequestValidator.validate(requestdto);
-        if(!errors.isEmpty()){
-            log.error("invalid request {}",errors);
-            throw new InvalidEntityException("invalid request", ErrorCodes.REQUEST_NOT_VALID,errors);
+        List<String> errors = RequestValidator.validate(requestdto);
+        if (!errors.isEmpty()) {
+            log.error("invalid request {}", errors);
+            throw new InvalidEntityException("invalid request", ErrorCodes.REQUEST_NOT_VALID, errors);
         }
-        Student student=studentRepository.findById(studentId).orElseThrow(
-                ()->new EntityNotFoundException("no student with this id :"+studentId,
-                        ErrorCodes.STUDENT_NOT_FOUND)
+
+        // Fetch student and rentalDetails
+        Student student = studentRepository.findById(studentId).orElseThrow(
+                () -> new EntityNotFoundException("no student with this id :" + studentId, ErrorCodes.STUDENT_NOT_FOUND)
         );
-        RentalDetails rentalDetails=rentalDetailsRepository.findById(rentalDetailsId).orElseThrow(
-                ()->new EntityNotFoundException("no rental details with this id :"+rentalDetailsId,
-                        ErrorCodes.RENTAL_DETAILS_NOT_FOUND)
+        RentalDetails rentalDetails = rentalDetailsRepository.findById(rentalDetailsId).orElseThrow(
+                () -> new EntityNotFoundException("no rental details with this id :" + rentalDetailsId, ErrorCodes.RENTAL_DETAILS_NOT_FOUND)
         );
+
+        // Check if request already exists
         Optional<Request> existingRequest = requestRepository.getRequestByStudentIdAndRentalDetailsId(studentId, rentalDetailsId);
         if (existingRequest.isPresent()) {
             throw new InvalidEntityException("request already exists", ErrorCodes.REQUEST_ALL_READY_EXISTS);
         }
 
-        Request request=Requestdto.toEntity(requestdto);
+        // Map DTO to entity
+        Request request = Requestdto.toEntity(requestdto);
         request.setStatus(Status.PENDING);
         request.setStudent(student);
-        student.getRequestSet().add(request);
         request.setRentalDetails(rentalDetails);
+
+        // Add request to student and rentalDetails
+        student.getRequestSet().add(request);
         rentalDetails.getRequestSet().add(request);
-        studentRepository.save(student);
-        rentalDetailsRepository.save(rentalDetails);
-        return Requestdto.fromEntity(requestRepository.save(request));
+
+        // Save request and cascade changes to student and rentalDetails
+        request = requestRepository.save(request);
+
+        // Return DTO representation of saved request
+        return Requestdto.fromEntity(request);
     }
 
     @Override
@@ -131,11 +144,13 @@ public class RequestServiceImpl implements RequestService{
             log.error("rental details id is null");
             return null;
         }
-        Optional<Request> request= requestRepository.getValidatedRequestByRentalDetailsId(rentalDetailsId);
-        return Optional.of(Requestdto.fromEntity(request.get())).orElseThrow(
-                ()->new EntityNotFoundException("no validated request for this rental detals id :"+rentalDetailsId,
-                        ErrorCodes.REQUEST_NOT_FOUND)
+        Request request= requestRepository.getValidatedRequestByRentalDetailsId(rentalDetailsId).orElseThrow(
+                ()->new EntityNotFoundException("no validated request for this rental details id :"+rentalDetailsId,
+                        ErrorCodes.RENTAL_DETAILS_NOT_FOUND)
         );
+        return Requestdto.fromEntity(request);
+
+
     }
 
     @Override
@@ -219,10 +234,16 @@ public class RequestServiceImpl implements RequestService{
             request.setStatus(Status.VALIDATED);
             request.setValidationTime(validationTime);
             request.setValidationDelay(request.getRentalDetails().getEndDate().toInstant());
+            Apartment apartment= request.getRentalDetails().getApartment();
+            apartment.setIsRented(true);
+            apartmentRepository.save(apartment);
             requestRepository.save(request);
         }else {
             log.error("cannot validate non accepted requests ");
-            return;
+            throw new InvalidEntityException("cannot validate non accepted requests",
+                    ErrorCodes.CANNOT_VALIDATE_NON_ACCEPTED_REQUESTS);
+
+
         }
 
     }

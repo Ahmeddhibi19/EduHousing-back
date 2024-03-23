@@ -10,8 +10,8 @@ import java.util.Optional;
 
 @Repository
 public interface ApplicationFeedbackRepository extends JpaRepository<ApplicationFeedback,Integer> {
-    Optional<ApplicationFeedback> findApplicationFeedbackByStudentId(Integer id);
-    Optional<ApplicationFeedback> findApplicationFeedbackByHomeownerId(Integer id);
-    @Query("select app from ApplicationFeedback app where app.homeowner.firstName=:userName or app.student.firstName=:userName")
+    Optional<ApplicationFeedback> findApplicationFeedbackByUserId(Integer id);
+
+    @Query("select app from ApplicationFeedback app where app.user.firstName=:userName")
     List<ApplicationFeedback> findAllByFirstName(String userName);
 }

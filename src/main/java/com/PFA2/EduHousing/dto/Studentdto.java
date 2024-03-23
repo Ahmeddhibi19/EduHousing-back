@@ -1,5 +1,6 @@
 package com.PFA2.EduHousing.dto;
 
+import com.PFA2.EduHousing.Utils.ImageUtils;
 import com.PFA2.EduHousing.model.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
@@ -10,8 +11,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.FileOutputStream;
+import java.sql.Array;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -33,27 +38,32 @@ public class Studentdto  {
 
     private String address;
 
-    @JsonIgnore
+    private byte[] profileImage1;
+   // private FileOutputStream image;
     private ProfileImagedto profileImage;
 
-    @JsonIgnore
+
     private ApplicationFeedbackdto applicationFeedbackdto;
 
-    @JsonIgnore
+
     private Set<Favouritesdto> favourites = new HashSet<>();
 
-    @JsonIgnore
+
     private Set<Requestdto> requests = new HashSet<>();
 
-    @JsonIgnore
+
     private Set<RentalFeedbackdto> rentalFeedbacks = new HashSet<>();
 
-    @JsonIgnore
+
     private Collegedto college;
 
     public static Studentdto fromEntity(Student student){
         if(student == null){
             return null;
+        }
+        byte[] imageData=null;
+        if (student.getProfileImage()!=null&&student.getProfileImage().getData()!=null){
+            imageData=ImageUtils.decompressImage(student.getProfileImage().getData());
         }
         return Studentdto.builder()
                 .id(student.getId())
@@ -64,6 +74,46 @@ public class Studentdto  {
                 .phoneNumber(student.getPhoneNumber())
                 .role(student.getRole())
                 .address(student.getAddress())
+                //.image()
+                .profileImage1(imageData)
+                /*.profileImage(
+                        student.getProfileImage()!=null?
+                        ProfileImagedto.builder()
+                                .id(student.getProfileImage().getId())
+                                .data(*//*Base64.getDecoder().decode(*//*student.getProfileImage().getData())
+                                .build():null
+                        )*/
+                .applicationFeedbackdto(
+                        student.getApplicationFeedback()!=null?
+                                ApplicationFeedbackdto.builder()
+                                        .id(student.getApplicationFeedback().getId())
+                                        .content(student.getApplicationFeedback().getContent())
+                                        .rating(student.getApplicationFeedback().getRating())
+                                        .build():null
+                )
+                .favourites(
+                        student.getFavouritesSet()!=null?
+                                student.getFavouritesSet().stream()
+                                        .map(Favouritesdto::fromEntity)
+                                        .collect(Collectors.toSet()):null
+                )
+                .requests(
+                        student.getRequestSet()!=null?
+                                student.getRequestSet().stream()
+                                        .map(Requestdto::fromEntity)
+                                        .collect(Collectors.toSet()) : null
+                )
+                .rentalFeedbacks(
+                        student.getRentalFeedbackSet()!=null?
+                                student.getRentalFeedbackSet().stream()
+                                        .map(RentalFeedbackdto::fromEntity)
+                                        .collect(Collectors.toSet()) : null
+                )
+                .college(Collegedto.builder()
+                        .id(student.getCollege().getId())
+                        .address(student.getCollege().getAddress())
+                        .name(student.getCollege().getName())
+                        .build())
                 .build();
     }
 
@@ -80,6 +130,16 @@ public class Studentdto  {
         student.setPassword(studentdto.getPassword());
         student.setPhoneNumber(studentdto.getPhoneNumber());
         student.setRole(studentdto.getRole());
+        student.setAddress(studentdto.getAddress());
+        student.setProfileImage(
+                studentdto.getProfileImage()!=null?
+                        ProfileImagedto.toEntity(studentdto.getProfileImage()):null
+        );
+        student.setApplicationFeedback(
+                studentdto.getApplicationFeedbackdto()!=null?
+                        ApplicationFeedbackdto.toEntity(studentdto.getApplicationFeedbackdto()):null
+        );
+        student.setCollege(Collegedto.toEntity(studentdto.getCollege()));
 
         return student;
     }

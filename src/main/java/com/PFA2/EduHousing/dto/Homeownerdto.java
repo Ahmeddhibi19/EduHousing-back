@@ -1,6 +1,7 @@
 package com.PFA2.EduHousing.dto;
 
 
+import com.PFA2.EduHousing.Utils.ImageUtils;
 import com.PFA2.EduHousing.model.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
@@ -13,6 +14,7 @@ import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -34,13 +36,13 @@ public class Homeownerdto  {
 
     private String address;
 
-    @JsonIgnore
+
     private ProfileImagedto profileImage;
 
-    @JsonIgnore
-    private List<Apartmentdto> apartments = new ArrayList<>();
 
-    @JsonIgnore
+    private List<Apartmentdto> apartments;
+
+
     private ApplicationFeedbackdto applicationFeedback;
 
     public static Homeownerdto fromEntity(Homeowner homeowner){
@@ -52,10 +54,28 @@ public class Homeownerdto  {
                 .firstName(homeowner.getFirstName())
                 .lastName(homeowner.getLastName())
                 .email(homeowner.getEmail())
-                .password(homeowner.getPassword())
+               /* .password(homeowner.getPassword())*/
                 .phoneNumber(homeowner.getPhoneNumber())
                 .role(homeowner.getRole())
                 .address(homeowner.getAddress())
+                .profileImage(
+                        homeowner.getProfileImage()!=null?
+                        ProfileImagedto.builder()
+                        .id(homeowner.getProfileImage().getId())
+                        .data(ImageUtils.decompressImage(homeowner.getProfileImage().getData()))
+                        .type(homeowner.getProfileImage().getType())
+                        .build():null
+                )
+                .apartments(
+                        homeowner.getApartmentList()!=null?
+                                homeowner.getApartmentList().stream()
+                                        .map(Apartmentdto::fromEntity)
+                                        .collect(Collectors.toList()) : null
+                )
+                .applicationFeedback(
+                        homeowner.getApplicationFeedback()!=null?
+                            ApplicationFeedbackdto.fromEntity(homeowner.getApplicationFeedback()):null
+                )
                 .build();
     }
 
@@ -72,6 +92,14 @@ public class Homeownerdto  {
         homeowner.setPassword(homeownerdto.getPassword());
         homeowner.setPhoneNumber(homeownerdto.getPhoneNumber());
         homeowner.setRole(homeownerdto.getRole());
+        homeowner.setProfileImage(
+                homeownerdto.getProfileImage()!=null?
+                        ProfileImagedto.toEntity(homeownerdto.getProfileImage()):null
+                );
+        homeowner.setApplicationFeedback(
+                homeownerdto.getApplicationFeedback()!=null?
+                        ApplicationFeedbackdto.toEntity(homeownerdto.getApplicationFeedback()):null
+        );
 
         return homeowner;
     }

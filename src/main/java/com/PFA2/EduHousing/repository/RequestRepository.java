@@ -27,6 +27,6 @@ public interface RequestRepository extends JpaRepository<Request,Integer> {
     public List<Request> getAllValidatedRequestsByStudentId(Integer studentID);
 
    /* Optional<Request> findByStudentIdAndRentalDetailsId(Integer studentId, Integer rentalDetailsId);*/
-    @Query("select r from Request r where r.status=:ACCEPTED AND r.rentalDetails.id=:rentalDetails")
+    @Query("select r from Request r where r.status='ACCEPTED' AND r.rentalDetails.id=:rentalDetails")
     Optional<Request> getRequestsByAcceptanceAndRentalDetailsId(Integer rentalDetails);
 }

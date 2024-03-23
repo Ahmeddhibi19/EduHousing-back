@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/eduhousing?createDatabaseIfNotExist=true&userSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/eduhousing?createDatabaseIfNotExist=true&userSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT
     username: root
     password: admin
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -14,6 +14,22 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+  #web:
+    #resources:
+      #static-locations: classpath:/META-INF/resources/,classpath:/resources/static/,classpath:/static/,classpath:/public/
 
 server:
   port: 8081
+
+#springdoc:
+  #use-management-port: true
+  #packagesToScan: com.PFA2.EduHousing
+  #swagger-ui:
+    #path: /swagger-ui
+
+#management:
+  #endpoints:
+    #web:
+      #exposure:
+        #include: openapi, swagger-ui
+

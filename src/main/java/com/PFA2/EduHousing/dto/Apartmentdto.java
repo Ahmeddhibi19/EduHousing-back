@@ -1,5 +1,6 @@
 package com.PFA2.EduHousing.dto;
 
+import com.PFA2.EduHousing.Utils.ImageUtils;
 import com.PFA2.EduHousing.model.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -32,31 +34,31 @@ public class Apartmentdto {
 
     private Boolean isRented;
 
+    private List<byte[]> imageList;
 
-    @JsonIgnore
     private Homeownerdto homeowner;
 
-    @JsonIgnore
     private List<Distancedto> distances = new ArrayList<>();
 
-    @JsonIgnore
     private Citydto citydto;
 
-    @JsonIgnore
     private List<ApartmentImagedto> images = new ArrayList<>();
 
-    @JsonIgnore
     private Set<Favouritesdto> favourites = new HashSet<>();
 
-    @JsonIgnore
     private List<RentalDetailsdto> rentalDetails = new ArrayList<>();
 
-    @JsonIgnore
     private Set<RentalFeedbackdto> rentalFeedbacks = new HashSet<>();
 
     public static Apartmentdto fromEntity(Apartment apartment){
         if(apartment==null){
             return null;
+        }
+        List<byte[]> imageList=new ArrayList<>();
+        if(apartment.getImageList()!=null){
+            for (ApartmentImage apartmentImage: apartment.getImageList()){
+                imageList.add(ImageUtils.decompressImage(apartmentImage.getData()));
+            }
         }
         return Apartmentdto.builder()
                 .id(apartment.getId())
@@ -67,6 +69,55 @@ public class Apartmentdto {
                 .type(apartment.getType())
                 .rating(apartment.getRating())
                 .isRented(apartment.getIsRented())
+                .imageList(imageList)
+                .homeowner(
+                        apartment.getHomeowner()!=null?
+                        Homeownerdto.builder()
+                                .id(apartment.getHomeowner().getId())
+                                .address(apartment.getHomeowner().getAddress())
+                                .firstName(apartment.getHomeowner().getFirstName())
+                                .lastName(apartment.getHomeowner().getLastName())
+                                .profileImage(ProfileImagedto.fromEntity(apartment.getHomeowner().getProfileImage()))
+
+                        .build():null
+                )
+                .distances(
+                        apartment.getDistanceList()!=null ?
+                                apartment.getDistanceList().stream()
+                                        .map(Distancedto::fromEntity)
+                                        .collect(Collectors.toList()) : null
+                )
+                .citydto(
+                        Citydto.builder()
+                                .id(apartment.getCity().getId())
+                                .name(apartment.getCity().getName())
+                                .postalCode(apartment.getCity().getPostalCode())
+                                .build()
+                )
+                /*.images(
+                        apartment.getImageList()!=null ?
+                                apartment.getImageList().stream()
+                                        .map(ApartmentImagedto::fromEntity)
+                                        .collect(Collectors.toList()) : null
+                )*/
+                .favourites(
+                        apartment.getFavouritesSet()!=null?
+                                apartment.getFavouritesSet().stream()
+                                        .map(Favouritesdto::fromEntity)
+                                        .collect(Collectors.toSet()):null
+                )
+                .rentalDetails(
+                        apartment.getRentalDetailsList()!=null?
+                                apartment.getRentalDetailsList().stream()
+                                        .map(RentalDetailsdto::fromEntity)
+                                        .collect(Collectors.toList()) : null
+                )
+                .rentalFeedbacks(
+                        apartment.getRentalFeedbackSet()!=null?
+                                apartment.getRentalFeedbackSet().stream()
+                                        .map(RentalFeedbackdto::fromEntity)
+                                        .collect(Collectors.toSet()):null
+                )
                 .build();
     }
 
@@ -83,6 +134,8 @@ public class Apartmentdto {
         apartment.setRating(apartmentdto.getRating());
         apartment.setType(apartmentdto.getType());
         apartment.setIsRented(apartmentdto.getIsRented());
+        //apartment.setHomeowner(Homeownerdto.toEntity(apartmentdto.getHomeowner()));
+        //apartment.setCity(Citydto.toEntity(apartmentdto.getCitydto()));
 
         return apartment;
     }

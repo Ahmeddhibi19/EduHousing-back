@@ -25,8 +25,7 @@ import java.util.stream.Collectors;
 public class ApplicationFeedbackServiceImpl implements ApplicationFeedbackService {
     private final ApplicationFeedbackRepository applicationFeedbackRepository;
     private final UserRepository userRepository;
-    private final StudentRepository studentRepository;
-    private final HomeownerRepository homeownerRepository;
+
 
     @Autowired
     public ApplicationFeedbackServiceImpl(
@@ -37,8 +36,6 @@ public class ApplicationFeedbackServiceImpl implements ApplicationFeedbackServic
     ){
         this.applicationFeedbackRepository=applicationFeedbackRepository;
         this.userRepository=userRepository;
-        this.studentRepository=studentRepository;
-        this.homeownerRepository=homeownerRepository;
     }
     @Override
     public ApplicationFeedbackdto save(ApplicationFeedbackdto applicationFeedbackdto, Integer userId) {
@@ -76,12 +73,12 @@ public class ApplicationFeedbackServiceImpl implements ApplicationFeedbackServic
 
         ApplicationFeedback applicationFeedback=ApplicationFeedbackdto.toEntity(applicationFeedbackdto);
         if(user instanceof Student){
-            applicationFeedback.setStudent((Student) user);
+            applicationFeedback.setUser((Student) user);
             ((Student) user).setApplicationFeedback(applicationFeedback);
             userRepository.save((Student) user);
 
         }else if(user  instanceof  Homeowner){
-            applicationFeedback.setHomeowner((Homeowner) user);
+            applicationFeedback.setUser((Homeowner) user);
             ((Homeowner) user).setApplicationFeedback(applicationFeedback);
             userRepository.save((Homeowner) user);
         }
@@ -101,11 +98,10 @@ public class ApplicationFeedbackServiceImpl implements ApplicationFeedbackServic
         }
 
 
-        Optional<ApplicationFeedback> applicationFeedback1=applicationFeedbackRepository.findApplicationFeedbackByStudentId(userId);
-        Optional<ApplicationFeedback> applicationFeedback2=applicationFeedbackRepository.findApplicationFeedbackByHomeownerId(userId);
+        Optional<ApplicationFeedback> applicationFeedback=applicationFeedbackRepository.findApplicationFeedbackByUserId(userId);
 
-        Optional<ApplicationFeedback> applicationFeedback=applicationFeedback1.isPresent()?
-                                                                applicationFeedback1 : applicationFeedback2 ;
+
+
 
         return Optional.of(ApplicationFeedbackdto.fromEntity(applicationFeedback.get())).orElseThrow(
                 ()->new EntityNotFoundException("no application's feedback for this user id :"+userId,

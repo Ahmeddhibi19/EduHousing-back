@@ -1,6 +1,8 @@
 package com.PFA2.EduHousing.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 
 import java.util.List;
@@ -18,6 +20,8 @@ public class RentalFeedback extends AbstractEntity{
     private String content;
 
     @Column(name = "rating")
+    @Max(10)
+    @Min(0)
     private Integer rating;
 
     @ManyToOne

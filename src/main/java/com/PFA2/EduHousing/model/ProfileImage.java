@@ -11,8 +11,12 @@ import lombok.*;
 @Entity
 @Table(name = "profileimage")
 public class ProfileImage extends AbstractEntity{
+    @Column(name = "name")
+    private String name;
+    @Column(name = "type")
+    private String type;
     @Lob
-    @Column(name = "data", columnDefinition = "BLOB")
+    @Column(name = "data", columnDefinition = "LONGBLOB")
     private byte[] data;
 
     @OneToOne

@@ -1,5 +1,6 @@
 package com.PFA2.EduHousing.services.ApartmentImageService;
 
+import com.PFA2.EduHousing.Utils.ImageUtils;
 import com.PFA2.EduHousing.dto.ApartmentImagedto;
 import com.PFA2.EduHousing.exceptions.EntityNotFoundException;
 import com.PFA2.EduHousing.exceptions.ErrorCodes;
@@ -11,7 +12,10 @@ import com.PFA2.EduHousing.repository.ApartmentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,40 +34,60 @@ public class ApartmentImageServiceImpl implements ApartmentImageService {
         this.apartmentRepository=apartmentRepository;
     }
     @Override
-    public ApartmentImagedto save(ApartmentImagedto apartmentImagedto,Integer apartmentId) {
-        if(apartmentImagedto==null){
-            log.error("saving empty image ");
-            throw new InvalidEntityException("saving empty Apartment image",ErrorCodes.ADMIN_NOT_VALID);
+    public String save(MultipartFile file, Integer apartmentId) throws IOException {
+        if (file.isEmpty()) {
+            throw new IllegalArgumentException("Uploaded file is empty");
         }
         Apartment apartment=apartmentRepository.findById(apartmentId).orElseThrow(
                 ()->new EntityNotFoundException("there is no apartment with this id :"+apartmentId,
                         ErrorCodes.APARTMENT_NOT_FOUND)
         );
-        ApartmentImage apartmentImage=ApartmentImagedto.toEntity(apartmentImagedto);
-        apartmentImage.setApartment(apartment);
-        apartment.getImageList().add(apartmentImage);
-        apartmentRepository.save(apartment);
+        byte[] data = file.getBytes();
+        String fileName = file.getOriginalFilename();
+        String fileType = file.getContentType();
 
-        return ApartmentImagedto.fromEntity(
-                apartmentImageRepository.save(apartmentImage)
-        );
+        /*ApartmentImage apartmentImage = new ApartmentImage();
+        apartmentImage.setName(fileName);
+        apartmentImage.setType(fileType);
+        apartmentImage.setData(data);
+        apartmentImage.setApartment(apartment);*/
+        ApartmentImage apartmentImage=ApartmentImage.builder()
+                .name(fileName)
+                .type(fileType)
+                .data(ImageUtils.compressImage(file.getBytes()))
+                .apartment(apartment)
+                .build();
+
+        apartment.getImageList().add(apartmentImage);
+
+        if (apartmentImage==null){
+            return "file failed to upload"+fileName;
+        }
+        apartmentRepository.save(apartment);
+        apartmentImageRepository.save(apartmentImage);
+
+        return "file uploaded successfully"+fileName;
+
     }
 
     @Override
-    public ApartmentImagedto findById(Integer id) {
+    public byte[] findById(Integer id) {
         if (id==null){
-            log.error("apartmeny image id is null !!!");
+            log.error("apartment image id is null !!!");
             return null;
         }
         Optional<ApartmentImage> apartmentImage=apartmentImageRepository.findById(id);
-        return Optional.of(ApartmentImagedto.fromEntity(apartmentImage.get())).orElseThrow(
-                ()->new EntityNotFoundException("No apartment image with this id :"+id,
-                        ErrorCodes.HOME_IMAGE_NOT_FOUND)
-        );
+        if (apartmentImage.isEmpty()){
+            throw new EntityNotFoundException("No apartment image with this id :"+id,
+                    ErrorCodes.HOME_IMAGE_NOT_FOUND);
+        }
+
+
+        return ImageUtils.decompressImage(apartmentImage.get().getData());
     }
 
     @Override
-    public List<ApartmentImagedto> findAllByApartmentId(Integer id) {
+    public List<byte[]> findAllByApartmentId(Integer id) {
         if(id==null){
             log.error("Apartment id is null !!!");
             return null;
@@ -72,16 +96,24 @@ public class ApartmentImageServiceImpl implements ApartmentImageService {
                 ()->new EntityNotFoundException("there is no apartment with this id :"+id,
                         ErrorCodes.APARTMENT_NOT_FOUND)
         );
-        return apartmentImageRepository.findAllByApartmentId(id).stream()
-                .map(ApartmentImagedto::fromEntity)
-                .collect(Collectors.toList());
+        List<byte[]> images=new ArrayList<>();
+        List<ApartmentImage> apartmentImageList=apartmentImageRepository.findAllByApartmentId(id);
+        for (ApartmentImage apartmentImage:apartmentImageList){
+            byte[] image=ImageUtils.decompressImage(apartmentImage.getData());
+            images.add(image);
+        }
+
+        return images;
     }
 
     @Override
-    public List<ApartmentImagedto> findAll() {
-        return  apartmentImageRepository.findAll().stream()
-                .map(ApartmentImagedto::fromEntity)
-                .collect(Collectors.toList());
+    public List<byte[]> findAll() {
+        List<ApartmentImage> apartmentImageList=apartmentImageRepository.findAll();
+        List<byte[]> images=new ArrayList<>();
+        for (ApartmentImage apartmentImage:apartmentImageList){
+            images.add(ImageUtils.decompressImage(apartmentImage.getData()));
+        }
+        return images;
     }
 
     @Override

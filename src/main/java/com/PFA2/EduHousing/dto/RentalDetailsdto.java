@@ -11,6 +11,7 @@ import lombok.Data;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -31,10 +32,10 @@ public class RentalDetailsdto {
 
     private Boolean isCurrent;
 
-    @JsonIgnore
-    private Set<Requestdto> requests= new HashSet<>();
 
-    @JsonIgnore
+    private Set<Requestdto> requestdtoSet= new HashSet<>();
+
+
     private Apartmentdto apartment;
 
     public static RentalDetailsdto fromEntity(RentalDetails rentalDetails){
@@ -48,6 +49,35 @@ public class RentalDetailsdto {
                 .endDate(rentalDetails.getEndDate())
                 .description(rentalDetails.getDescription())
                 .isCurrent(rentalDetails.getIsCurrent())
+                .requestdtoSet(
+                        rentalDetails.getRequestSet()!=null?
+                                rentalDetails.getRequestSet().stream()
+                                        .map(Requestdto::fromEntity).collect(Collectors.toSet())
+                                        :null
+                )
+                .apartment(
+                        Apartmentdto.builder()
+                                .id(rentalDetails.getApartment().getId())
+                                .address(rentalDetails.getApartment().getAddress())
+                                .type(rentalDetails.getApartment().getType())
+                                .images(
+                                        rentalDetails.getApartment().getImageList().stream().map(ApartmentImagedto::fromEntity)
+                                                .collect(Collectors.toList())
+                                )
+                                .rating(rentalDetails.getApartment().getRating())
+                                .isRented(rentalDetails.getApartment().getIsRented())
+                                .homeowner(
+                                        Homeownerdto.builder()
+                                                .id(rentalDetails.getApartment().getHomeowner().getId())
+                                                .email(rentalDetails.getApartment().getHomeowner().getEmail())
+                                                .firstName(rentalDetails.getApartment().getHomeowner().getFirstName())
+                                                .lastName(rentalDetails.getApartment().getHomeowner().getLastName())
+                                                .phoneNumber(rentalDetails.getApartment().getHomeowner().getPhoneNumber())
+                                        .build()
+                                )
+                                .build()
+                )
+
                 .build() ;
     }
 
@@ -62,6 +92,7 @@ public class RentalDetailsdto {
         rentalDetails.setEndDate(rentalDetailsdto.getEndDate());
         rentalDetails.setDescription(rentalDetailsdto.getDescription());
         rentalDetails.setIsCurrent(rentalDetailsdto.getIsCurrent());
+        rentalDetails.setApartment(Apartmentdto.toEntity(rentalDetailsdto.getApartment()));
         return rentalDetails;
     }
 }

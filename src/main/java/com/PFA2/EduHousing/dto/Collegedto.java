@@ -12,6 +12,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -50,6 +51,25 @@ public class Collegedto {
                 .address(college.getAddress())
                 .latitude(college.getLatitude())
                 .longitude(college.getLongitude())
+                .city(
+                        Citydto.builder()
+                                .id(college.getCity().getId())
+                                .name(college.getCity().getName())
+                                .postalCode(college.getCity().getPostalCode())
+                                .build()
+                )
+                .distances(
+                        college.getDistanceList()!=null?
+                                college.getDistanceList().stream()
+                                        .map(Distancedto::fromEntity)
+                                        .collect(Collectors.toList()) : null
+                )
+                .students(
+                        college.getStudentList()!=null?
+                                college.getStudentList().stream()
+                                        .map(Studentdto::fromEntity)
+                                        .collect(Collectors.toList()) : null
+                )
                 .build();
     }
 
@@ -63,6 +83,7 @@ public class Collegedto {
         college.setAddress(collegedto.getAddress());
         college.setLatitude(collegedto.getLatitude());
         college.setLongitude(collegedto.getLongitude());
+        college.setCity(Citydto.toEntity(collegedto.getCity()));
         return college;
     }
 }

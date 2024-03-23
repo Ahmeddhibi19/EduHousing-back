@@ -20,6 +20,6 @@ public interface StudentRepository extends JpaRepository<Student,Integer> {
 
     public void deleteStudentByPhoneNumber(String phoneNumber);
 
-    @Query("select s from Student s where s.college=:collegeId")
+    @Query("select s from Student s where s.college.id=:collegeId")
     public List<Student> findAllByCollegeId(Integer collegeId);
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Data
@@ -17,14 +18,14 @@ public class Student extends User{
     @Column(name = "address")
     private String address;
 
-    @OneToOne(mappedBy = "student")
-    private ApplicationFeedback applicationFeedback;
 
     @OneToMany(mappedBy = "student")
     private Set<Favourites> favouritesSet = new HashSet<>();
 
+
     @OneToMany(mappedBy = "student",cascade = CascadeType.ALL)
     private Set<Request> requestSet = new HashSet<>();
+
 
     @OneToMany(mappedBy = "student")
     private Set<RentalFeedback> rentalFeedbackSet = new HashSet<>();
@@ -32,4 +33,9 @@ public class Student extends User{
     @ManyToOne
     @JoinColumn(name = "college_id")
     private College college;
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(address, favouritesSet, rentalFeedbackSet, college);
+    }
 }

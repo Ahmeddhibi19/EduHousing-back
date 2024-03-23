@@ -1,5 +1,6 @@
 package com.PFA2.EduHousing.services.ProfileImageService;
 
+import com.PFA2.EduHousing.Utils.ImageUtils;
 import com.PFA2.EduHousing.dto.ProfileImagedto;
 import com.PFA2.EduHousing.exceptions.EntityNotFoundException;
 import com.PFA2.EduHousing.exceptions.ErrorCodes;
@@ -9,7 +10,9 @@ import com.PFA2.EduHousing.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -27,7 +30,11 @@ public class ProfileImageServiceImpl implements ProfileImageService{
     }
 
     @Override
-    public ProfileImagedto save(ProfileImagedto profileImagedto, Integer userId) {
+    public String save(MultipartFile file, Integer userId) throws IOException {
+        if (file == null) {
+            log.error("File is null");
+            throw new IllegalArgumentException("File is null");
+        }
         if(userId==null){
             log.error("user id is null");
             throw new IllegalArgumentException("user id is null");
@@ -36,7 +43,7 @@ public class ProfileImageServiceImpl implements ProfileImageService{
                 ()->new EntityNotFoundException("NO user with this id :"+userId,
                         ErrorCodes.USER_NOT_FOUND)
         );
-        ProfileImage profileImage=ProfileImagedto.toEntity(profileImagedto);
+        /*ProfileImage profileImage=ProfileImagedto.toEntity(profileImagedto);
         if(user instanceof Student){
             profileImage.setUser((Student) user);
             ((Student) user).setProfileImage(profileImage);
@@ -50,37 +57,55 @@ public class ProfileImageServiceImpl implements ProfileImageService{
             ((Admin)user).setProfileImage(profileImage);
             userRepository.save((Admin)user);
 
-        }
+        }*/
+        byte[] data = file.getBytes();
+        String fileName = file.getOriginalFilename();
+        String fileType = file.getContentType();
 
-        return ProfileImagedto.fromEntity(profileImageRepository.save(profileImage));
+        ProfileImage profileImage=ProfileImage.builder()
+                .name(fileName)
+                .type(fileType)
+                .data(ImageUtils.compressImage(file.getBytes()))
+                .user(user)
+                .build();
+        user.setProfileImage(profileImage);
+        if (profileImage==null){
+            return "file failed to upload"+fileName;
+        }
+        //userRepository.save(user);
+        profileImageRepository.save(profileImage);
+
+        return "file uploaded successfully"+fileName;
     }
 
     @Override
-    public ProfileImagedto findById(Integer id) {
+    public byte[] findById(Integer id) {
         if(id==null){
             log.error("image id is null");
             return null;
         }
         Optional<ProfileImage> profileImage=profileImageRepository.findById(id);
-        return Optional.of(ProfileImagedto.fromEntity(profileImage.get())).orElseThrow(
-                ()->new EntityNotFoundException("no profile image with this id :"+id,
-                        ErrorCodes.PROFILE_IMAGE_NOT_FOUND)
-        );
+        if(profileImage.isEmpty()){
+            throw new EntityNotFoundException("no profile image with this id :"+id,
+                    ErrorCodes.PROFILE_IMAGE_NOT_FOUND);
+        }
+        return ImageUtils.decompressImage(profileImage.get().getData());
     }
 
     @Override
-    public ProfileImagedto findByUserId(Integer userId) {
+    public byte[] findByUserId(Integer userId) {
         if(userId==null){
             log.error("user id is null");
             return null;
         }
         Optional<ProfileImage> profileImage= profileImageRepository.findProfileImageByUserId(userId);
-        return Optional.of(ProfileImagedto.fromEntity(profileImage.get())).orElseThrow(
-                ()->new EntityNotFoundException("no profile image with this id :"+userId,
-                        ErrorCodes.APPLICATION_FEEDBACK_NOT_FOUND)
-        );
-    }
+        if(profileImage.isEmpty()){
+            throw new EntityNotFoundException("no profile image with this user id :"+userId,
+                    ErrorCodes.PROFILE_IMAGE_NOT_FOUND);
+        }
+        return ImageUtils.decompressImage(profileImage.get().getData());
 
+    }
     @Override
     public void deleteById(Integer id) {
         if(id==null){

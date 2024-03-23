@@ -1,5 +1,6 @@
 package com.PFA2.EduHousing.dto;
 
+import com.PFA2.EduHousing.Utils.ImageUtils;
 import com.PFA2.EduHousing.model.RentalDetails;
 import com.PFA2.EduHousing.model.Request;
 import com.PFA2.EduHousing.model.Status;
@@ -11,6 +12,7 @@ import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.Instant;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -30,10 +32,10 @@ public class Requestdto {
 
     private Instant validationDelay ;
 
-    @JsonIgnore
+
     private RentalDetailsdto rentalDetails;
 
-    @JsonIgnore
+
     private Studentdto student;
 
 
@@ -49,6 +51,46 @@ public class Requestdto {
                 .validationTime(request.getValidationTime())
                 .acceptanceDelay(request.getAcceptanceDelay())
                 .validationDelay(request.getValidationDelay())
+                .rentalDetails(
+                        RentalDetailsdto.builder()
+                                .id(request.getRentalDetails().getId())
+                                .startDate(request.getRentalDetails().getStartDate())
+                                .endDate(request.getRentalDetails().getEndDate())
+                                .description(request.getRentalDetails().getDescription())
+                                .isCurrent(request.getRentalDetails().getIsCurrent())
+                                .monthlyAmount(request.getRentalDetails().getMonthlyAmount())
+                                .apartment(
+                                        Apartmentdto.builder()
+                                                .id(request.getRentalDetails().getApartment().getId())
+                                                .address(request.getRentalDetails().getApartment().getAddress())
+                                                .type(request.getRentalDetails().getApartment().getType())
+                                                .rating(request.getRentalDetails().getApartment().getRating())
+                                                .isRented(request.getRentalDetails().getApartment().getIsRented())
+                                                .images(
+                                                        request.getRentalDetails().getApartment()
+                                                                .getImageList().stream()
+                                                                .map(ApartmentImagedto::fromEntity)
+                                                                .collect(Collectors.toList())
+                                                )
+                                                .build()
+                                )
+                                .build()
+                )
+                .student(
+                        Studentdto.builder()
+                                .id(request.getStudent().getId())
+                                .email(request.getStudent().getEmail())
+                                .firstName(request.getStudent().getFirstName())
+                                .lastName(request.getStudent().getLastName())
+                                .profileImage(
+                                        request.getStudent().getProfileImage()!=null?
+                                        ProfileImagedto.builder()
+                                                .id(request.getStudent().getProfileImage().getId())
+                                                .data(ImageUtils.decompressImage(request.getStudent().getProfileImage().getData()))
+                                                .build():null
+                                )
+                                .build()
+                )
                 .build();
     }
 
@@ -65,6 +107,8 @@ public class Requestdto {
         request.setValidationTime(requestdto.getValidationTime());
         request.setAcceptanceDelay(requestdto.getAcceptanceDelay());
         request.setValidationDelay(requestdto.getValidationDelay());
+        request.setStudent(Studentdto.toEntity(requestdto.getStudent()));
+        request.setRentalDetails(RentalDetailsdto.toEntity(requestdto.getRentalDetails()));
         return request;
     }
 }

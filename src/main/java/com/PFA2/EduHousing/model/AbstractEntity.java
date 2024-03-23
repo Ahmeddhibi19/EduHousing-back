@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Objects;
 
 @Data
 @MappedSuperclass
@@ -22,13 +23,17 @@ public class AbstractEntity implements Serializable {
     private Integer id;
 
     @CreatedDate
-    @Column(name = "creation_time",nullable = false)
+    @Column(name = "creation_time",nullable = false,updatable = false)
     @JsonIgnore
-    private Instant creationTime;
+    private Instant creationTime=Instant.now();
 
 
     @LastModifiedDate
     @Column(name = "last_modified_date")
     @JsonIgnore
     private Instant lastModified;
+    /*@Override
+    public int hashCode() {
+        return Objects.hash(id); // Use the unique identifier for hashCode calculation
+    }*/
 }

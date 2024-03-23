@@ -1,17 +1,19 @@
 package com.PFA2.EduHousing.services.ApartmentImageService;
 
 import com.PFA2.EduHousing.dto.ApartmentImagedto;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface ApartmentImageService {
 
-    public ApartmentImagedto save(ApartmentImagedto apartmentImagedto,Integer apartmentId);
+    public String save(MultipartFile file, Integer apartmentId)throws IOException;
 
-    public ApartmentImagedto findById(Integer id);
+    public byte[] findById(Integer id);
 
-    public List<ApartmentImagedto> findAllByApartmentId(Integer id);
-    public List<ApartmentImagedto> findAll();
+    public List<byte[]> findAllByApartmentId(Integer id);
+    public List<byte[]> findAll();
     public void deleteById(Integer id);
 
 }

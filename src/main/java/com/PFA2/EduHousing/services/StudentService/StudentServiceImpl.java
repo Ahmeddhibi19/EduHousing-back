@@ -137,8 +137,8 @@ public class StudentServiceImpl implements StudentService {
         existingStudent.setLastName(StringUtils.hasLength(studentdto.getLastName()) ?
                 studentdto.getLastName() : existingStudent.getLastName());
 
-        existingStudent.setPassword(StringUtils.hasLength(studentdto.getPassword()) ?
-                studentdto.getPassword() : existingStudent.getPassword());
+/*        existingStudent.setPassword(StringUtils.hasLength(studentdto.getPassword()) ?
+                studentdto.getPassword() : existingStudent.getPassword());*/
 
         existingStudent.setPhoneNumber(StringUtils.hasLength(studentdto.getPhoneNumber()) ?
                 studentdto.getPhoneNumber() : existingStudent.getPhoneNumber());

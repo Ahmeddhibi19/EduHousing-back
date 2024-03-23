@@ -22,10 +22,10 @@ public class RentalFeedbackdto {
 
     private Integer rating;
 
-    @JsonIgnore
+
     private Apartmentdto apartment;
 
-    @JsonIgnore
+
     private Studentdto student;
 
     public static RentalFeedbackdto fromEntity(RentalFeedback rentalFeedback){
@@ -36,6 +36,28 @@ public class RentalFeedbackdto {
                 .id(rentalFeedback.getId())
                 .content(rentalFeedback.getContent())
                 .rating(rentalFeedback.getRating())
+                .apartment(
+                        Apartmentdto.builder()
+                                .id(rentalFeedback.getApartment().getId())
+                                .type(rentalFeedback.getApartment().getType())
+                                .address(rentalFeedback.getApartment().getAddress())
+                                .build()
+                )
+                .student(
+                        Studentdto.builder()
+                                .id(rentalFeedback.getStudent().getId())
+                                .email(rentalFeedback.getStudent().getEmail())
+                                .firstName(rentalFeedback.getStudent().getFirstName())
+                                .lastName(rentalFeedback.getStudent().getLastName())
+                                .college(
+                                        Collegedto.builder()
+                                                .id(rentalFeedback.getStudent().getCollege().getId())
+                                                .name(rentalFeedback.getStudent().getCollege().getName())
+                                                .address(rentalFeedback.getStudent().getCollege().getAddress())
+                                                .build()
+                                )
+                                .build()
+                )
                 .build();
     }
 
@@ -48,6 +70,8 @@ public class RentalFeedbackdto {
         rentalFeedback.setId(rentalFeedbackdto.getId());
         rentalFeedback.setContent(rentalFeedbackdto.getContent());
         rentalFeedback.setRating(rentalFeedbackdto.getRating());
+        rentalFeedback.setStudent(Studentdto.toEntity(rentalFeedbackdto.getStudent()));
+        rentalFeedback.setApartment(Apartmentdto.toEntity(rentalFeedbackdto.getApartment()));
         return rentalFeedback;
     }
 }

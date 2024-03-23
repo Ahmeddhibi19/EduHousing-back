@@ -5,15 +5,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User,Integer> {
 
-    public User findUserByFirstName(String firstName);
+    public Optional<User> findUserByFirstName(String firstName);
 
-    public User findUserByEmail(String email);
+    public Optional<User> findUserByEmail(String email);
 
-    public User findUserByPhoneNumber(String phoneNumber);
+    public Optional<User> findUserByPhoneNumber(String phoneNumber);
 
     public List<User> findAllByFirstName(String firstName);
 

@@ -11,6 +11,8 @@ import jakarta.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.stream.Collectors;
+
 @Data
 @Builder
 public class Favouritesdto {
@@ -20,10 +22,10 @@ public class Favouritesdto {
 
     private String description;
 
-    @JsonIgnore
+
     private Studentdto student;
 
-    @JsonIgnore
+
     private Apartmentdto apartment;
 
     public static Favouritesdto fromEntity(Favourites favourites){
@@ -33,6 +35,22 @@ public class Favouritesdto {
         return Favouritesdto.builder()
                 .id(favourites.getId())
                 .description(favourites.getDescription())
+                .student(
+                        Studentdto.builder()
+                                .id(favourites.getStudent().getId())
+                                .firstName(favourites.getStudent().getFirstName())
+                                .lastName(favourites.getStudent().getLastName())
+                                .email(favourites.getStudent().getEmail())
+                                .build()
+                )
+                .apartment(
+                        Apartmentdto.builder()
+                                .id(favourites.getApartment().getId())
+                                .address(favourites.getApartment().getAddress())
+                                .type(favourites.getApartment().getType())
+                                .images(favourites.getApartment().getImageList().stream().map(ApartmentImagedto::fromEntity).collect(Collectors.toList()))
+                                .build()
+                )
                 .build();
     }
 
@@ -43,6 +61,8 @@ public class Favouritesdto {
         Favourites favourites= new Favourites();
         favourites.setId(favouritesdto.getId());
         favourites.setDescription(favouritesdto.getDescription());
+        favourites.setStudent(Studentdto.toEntity(favouritesdto.getStudent()));
+        favourites.setApartment(Apartmentdto.toEntity(favouritesdto.getApartment()));
         return favourites ;
     }
 }

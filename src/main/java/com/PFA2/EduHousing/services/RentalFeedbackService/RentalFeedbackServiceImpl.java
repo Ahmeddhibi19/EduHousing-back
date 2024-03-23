@@ -135,7 +135,33 @@ public class RentalFeedbackServiceImpl implements RentalFeedbackService{
         }
         return rentalFeedbackRepository.findAllByApartmentIdAndRatingGreaterThan(apartmentId,value).stream()
                 .map(RentalFeedbackdto::fromEntity)
+
                 .collect(Collectors.toList());
+    }
+    @Override
+    public void deleteById(Integer id){
+        if(id==null){
+            log.error("rental feedback id is null");
+            return;
+        }
+        rentalFeedbackRepository.deleteById(id);
+    }
+    @Override
+    public RentalFeedbackdto update(RentalFeedbackdto rentalFeedbackdto){
+        RentalFeedback rentalFeedback= rentalFeedbackRepository.findById(rentalFeedbackdto.getId()).orElseThrow(
+                ()->new EntityNotFoundException("no rental feedback found with this id :"+rentalFeedbackdto.getId(),
+                        ErrorCodes.RENTAL_FEEDBACK_NOT_FOUND)
+        );
+        rentalFeedback.setContent(
+                rentalFeedbackdto.getContent()!=null?
+                        rentalFeedbackdto.getContent() : rentalFeedback.getContent()
+        );
+        rentalFeedback.setRating(
+                rentalFeedbackdto.getRating()!=null?
+                        rentalFeedbackdto.getRating(): rentalFeedback.getRating()
+        );
+
+        return RentalFeedbackdto.fromEntity(rentalFeedbackRepository.save(rentalFeedback));
     }
 
 

@@ -92,7 +92,7 @@ public class RentalDetailsServiceImpl implements RentalDetailsService{
         newRentalDetails.setApartment(apartment);
         apartment.getRentalDetailsList().add(newRentalDetails);
         apartmentRepository.save(apartment);
-        return RentalDetailsdto.fromEntity(newRentalDetails);
+        return RentalDetailsdto.fromEntity(rentalDetailsRepository.save(newRentalDetails));
     }
 
     @Override

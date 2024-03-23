@@ -3,6 +3,7 @@ package com.PFA2.EduHousing.dto;
 import com.PFA2.EduHousing.model.ApplicationFeedback;
 import com.PFA2.EduHousing.model.Homeowner;
 import com.PFA2.EduHousing.model.Student;
+import com.PFA2.EduHousing.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
@@ -21,10 +22,10 @@ public class ApplicationFeedbackdto {
 
     private Integer rating;
 
-    @JsonIgnore
+
     private Homeownerdto homeowner;
 
-    @JsonIgnore
+
     private Studentdto student;
 
     public static ApplicationFeedbackdto fromEntity(ApplicationFeedback applicationFeedback){
@@ -35,6 +36,26 @@ public class ApplicationFeedbackdto {
                 .id(applicationFeedback.getId())
                 .content(applicationFeedback.getContent())
                 .rating(applicationFeedback.getRating())
+                .student(
+                        applicationFeedback.getUser() instanceof Student ?
+                                Studentdto.builder()
+                                        .id(applicationFeedback.getUser().getId())
+                                        .email(applicationFeedback.getUser().getEmail())
+                                        .firstName(applicationFeedback.getUser().getFirstName())
+                                        .lastName(applicationFeedback.getUser().getLastName())
+                                        .phoneNumber(applicationFeedback.getUser().getPhoneNumber())
+                                        .build():null
+                )
+                .homeowner(
+                        applicationFeedback.getUser() instanceof Homeowner?
+                                Homeownerdto.builder()
+                                        .id(applicationFeedback.getUser().getId())
+                                        .email(applicationFeedback.getUser().getEmail())
+                                        .firstName(applicationFeedback.getUser().getFirstName())
+                                        .lastName(applicationFeedback.getUser().getLastName())
+                                        .phoneNumber(applicationFeedback.getUser().getPhoneNumber())
+                                        .build():null
+                )
                 .build();
     }
     public static ApplicationFeedback toEntity(ApplicationFeedbackdto applicationFeedbackdto){
@@ -45,6 +66,16 @@ public class ApplicationFeedbackdto {
         applicationFeedback.setId(applicationFeedbackdto.getId());
         applicationFeedback.setContent(applicationFeedbackdto.getContent());
         applicationFeedback.setRating(applicationFeedbackdto.getRating());
+
+        User user = null;
+        if(applicationFeedbackdto.getStudent()!=null){
+            user=Studentdto.toEntity(applicationFeedbackdto.getStudent());
+        } else if (applicationFeedbackdto.getHomeowner()!=null) {
+            user=Homeownerdto.toEntity(applicationFeedbackdto.getHomeowner());
+
+        }
+
+        applicationFeedback.setUser(user);
         return applicationFeedback;
     }
 }

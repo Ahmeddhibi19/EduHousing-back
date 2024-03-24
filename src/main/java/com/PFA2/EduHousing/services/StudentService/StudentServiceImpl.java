@@ -12,6 +12,7 @@ import com.PFA2.EduHousing.repository.StudentRepository;
 import com.PFA2.EduHousing.validator.StudentValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -25,11 +26,13 @@ import java.util.stream.Collectors;
 public class StudentServiceImpl implements StudentService {
     private final CollegeRepository collegeRepository;
     private final StudentRepository studentRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public StudentServiceImpl(StudentRepository studentRepository , CollegeRepository collegeRepository){
+    public StudentServiceImpl(StudentRepository studentRepository , CollegeRepository collegeRepository,PasswordEncoder passwordEncoder){
         this.studentRepository=studentRepository;
         this.collegeRepository=collegeRepository;
+        this.passwordEncoder=passwordEncoder;
     }
     @Override
     public Studentdto save(Studentdto studentdto,Integer collegeId) {
@@ -55,9 +58,10 @@ public class StudentServiceImpl implements StudentService {
         Optional<Student> studentPhoneNumber=studentRepository.findStudentByPhoneNumber(studentdto.getPhoneNumber());
         if(studentPhoneNumber.isPresent()){
             log.error("Student's phone number all ready exists {}",studentdto);
-            throw new InvalidEntityException("User all ready exists with this email",ErrorCodes.USER_ALL_READY_EXISTS);
+            throw new InvalidEntityException("User all ready exists with this phone number",ErrorCodes.USER_ALL_READY_EXISTS);
         }
         studentdto.setRole(Roles.STUDENT);
+        studentdto.setPassword(passwordEncoder.encode(studentdto.getPassword()));
         Student newStudent=Studentdto.toEntity(studentdto);
         newStudent.setCollege(college);
         return Studentdto.fromEntity(studentRepository.save(newStudent));

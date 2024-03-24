@@ -44,12 +44,13 @@ public class Admindto  {
                 .role(admin.getRole())
                 .isActivated(admin.getIsActivated())
                 .profileImage(
+                        admin.getProfileImage()!=null?
                         ProfileImagedto.builder()
                                 .id(admin.getProfileImage().getId())
                                 .type(admin.getProfileImage().getType())
                                 .name(admin.getProfileImage().getName())
                                 .data(ImageUtils.decompressImage(admin.getProfileImage().getData()))
-                                .build()
+                                .build():null
                 )
                 .build();
     }

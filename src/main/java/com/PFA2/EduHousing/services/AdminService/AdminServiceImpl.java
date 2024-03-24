@@ -13,6 +13,7 @@ import com.PFA2.EduHousing.validator.AdminValidator;
 import com.PFA2.EduHousing.validator.HomeownerValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -25,11 +26,17 @@ import java.util.stream.Collectors;
 public class AdminServiceImpl implements AdminService {
 
     private final AdminRepository adminRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AdminServiceImpl(AdminRepository adminRepository){
+    public AdminServiceImpl(
+            AdminRepository adminRepository,
+            PasswordEncoder passwordEncoder
+    ){
         this.adminRepository=adminRepository;
+        this.passwordEncoder=passwordEncoder;
     }
+
     @Override
     public Admindto save(Admindto admindto) {
         List<String> errors= AdminValidator.validate(admindto);
@@ -46,9 +53,10 @@ public class AdminServiceImpl implements AdminService {
         Optional<Admin> adminPhoneNumber= adminRepository.findAdminByPhoneNumber(admindto.getPhoneNumber());
         if(adminPhoneNumber.isPresent()){
             log.error("admin's phone number all ready exists {}",admindto);
-            throw new InvalidEntityException("User with this email all ready exists with this email",ErrorCodes.USER_ALL_READY_EXISTS);
+            throw new InvalidEntityException("User with this phone number already :"+admindto.getPhoneNumber(),ErrorCodes.USER_ALL_READY_EXISTS);
         }
         admindto.setRole(Roles.ADMIN);
+        admindto.setPassword(passwordEncoder.encode(admindto.getPassword()));
 
         return Admindto.fromEntity(
                 adminRepository.save(

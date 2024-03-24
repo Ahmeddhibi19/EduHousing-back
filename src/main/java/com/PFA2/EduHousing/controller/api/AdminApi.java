@@ -26,7 +26,7 @@ public interface AdminApi {
             @ApiResponse(responseCode = "200",description = "admin saved successfully "),
             @ApiResponse(responseCode = "400",description = "the object admin is not valid !!!")
     })
-    public Admindto save(@RequestBody Admindto admindto);
+    public String save(@RequestBody Admindto admindto);
     @GetMapping(value = APP_ROOT+"/admin/{adminId}",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "search admin by Id... ",description = "needs the admin Id.."/*,response = Admindto.class*/)
     @ApiResponses(value = {

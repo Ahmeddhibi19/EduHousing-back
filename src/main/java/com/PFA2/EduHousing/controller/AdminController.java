@@ -1,26 +1,37 @@
 package com.PFA2.EduHousing.controller;
 
+import com.PFA2.EduHousing.Utils.JwtUtils;
 import com.PFA2.EduHousing.controller.api.AdminApi;
 import com.PFA2.EduHousing.dto.Admindto;
+import com.PFA2.EduHousing.model.auth.ExtendedUser;
 import com.PFA2.EduHousing.services.AdminService.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class AdminController implements AdminApi {
     private final AdminService adminService;
+    private final JwtUtils jwtUtils;
 
     @Autowired
     public AdminController(
-            AdminService adminService
+            AdminService adminService,
+            JwtUtils jwtUtils
     ){
         this.adminService=adminService;
+        this.jwtUtils=jwtUtils;
     }
     @Override
-    public Admindto save(Admindto admindto) {
-        return adminService.save(admindto);
+    public String save(Admindto admindto) {
+        Admindto admin =adminService.save(admindto);
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority (admin.getRole().toString()));
+        ExtendedUser user = new ExtendedUser(admin.getEmail(), admin.getPassword(), authorities);
+        return jwtUtils.generateToken(user);
     }
 
     @Override

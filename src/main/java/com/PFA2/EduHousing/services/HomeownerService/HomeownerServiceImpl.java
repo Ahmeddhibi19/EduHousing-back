@@ -11,6 +11,7 @@ import com.PFA2.EduHousing.repository.HomeownerRepository;
 import com.PFA2.EduHousing.validator.HomeownerValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -21,11 +22,13 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class HomeownerServiceImpl implements HomeownerService{
-    public final HomeownerRepository homeownerRepository;
+    private final HomeownerRepository homeownerRepository;
+    private final PasswordEncoder passwordEncoder;
 
    @Autowired
-   public HomeownerServiceImpl(HomeownerRepository homeownerRepository){
+   public HomeownerServiceImpl(HomeownerRepository homeownerRepository,PasswordEncoder passwordEncoder){
        this.homeownerRepository=homeownerRepository;
+       this.passwordEncoder=passwordEncoder;
    }
     @Override
     public Homeownerdto save(Homeownerdto homeownerdto) {
@@ -47,6 +50,7 @@ public class HomeownerServiceImpl implements HomeownerService{
             throw new InvalidEntityException("User with this email all ready exists with this email",ErrorCodes.USER_ALL_READY_EXISTS);
         }
        homeownerdto.setRole(Roles.HOMEOWNER);
+        homeownerdto.setPassword(passwordEncoder.encode(homeownerdto.getPassword()));
 
         return Homeownerdto.fromEntity(
                 homeownerRepository.save(

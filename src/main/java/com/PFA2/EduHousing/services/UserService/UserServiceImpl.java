@@ -1,4 +1,39 @@
 package com.PFA2.EduHousing.services.UserService;
 
-public class UserServiceImpl {
+import com.PFA2.EduHousing.exceptions.EntityNotFoundException;
+import com.PFA2.EduHousing.exceptions.ErrorCodes;
+import com.PFA2.EduHousing.model.User;
+import com.PFA2.EduHousing.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserServiceImpl implements UserService{
+    private final UserRepository userRepository;
+    @Autowired
+    UserServiceImpl(UserRepository userRepository){
+        this.userRepository=userRepository;
+    }
+    @Override
+    public Integer getUserId(UserDetails userDetails) {
+        User user=userRepository.findUserByEmail(userDetails.getUsername()).orElseThrow(
+                ()->new EntityNotFoundException(
+                        "no user with the provided email",
+                        ErrorCodes.USER_NOT_FOUND
+                )
+        );
+        return user.getId();
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        User user=userRepository.findUserByEmail(email).orElseThrow(
+                ()->new EntityNotFoundException(
+                        "no user with the provided email",
+                        ErrorCodes.USER_NOT_FOUND
+                )
+        );
+        return user;
+    }
 }

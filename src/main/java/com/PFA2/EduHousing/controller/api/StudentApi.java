@@ -24,7 +24,7 @@ public interface StudentApi {
             @ApiResponse(responseCode  = "200",description = "student saved successfully "),
             @ApiResponse(responseCode = "400",description = "the object student is not valid !!!")
     })
-    Studentdto save(@RequestBody Studentdto studentdto ,@PathVariable("college_id") Integer collegeId);
+    String save(@RequestBody Studentdto studentdto ,@PathVariable("college_id") Integer collegeId);
 
 
     @GetMapping(value = APP_ROOT+"/student/{studentId}",produces = MediaType.APPLICATION_JSON_VALUE)

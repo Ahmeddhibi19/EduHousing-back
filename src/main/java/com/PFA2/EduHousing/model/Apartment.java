@@ -42,23 +42,23 @@ public class Apartment extends AbstractEntity{
     @JoinColumn(name = "homeowner_id")
     private Homeowner homeowner;
 
-    @OneToMany(mappedBy = "apartment", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "apartment",  cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Distance> distanceList = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "city")
     private City city;
 
-    @OneToMany(mappedBy = "apartment", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "apartment", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ApartmentImage> imageList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "apartment")
+    @OneToMany(mappedBy = "apartment", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Favourites> favouritesSet = new HashSet<>();
 
-    @OneToMany(mappedBy = "apartment", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "apartment", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RentalDetails> rentalDetailsList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "apartment")
+    @OneToMany(mappedBy = "apartment", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<RentalFeedback> rentalFeedbackSet = new HashSet<>();
 
 }

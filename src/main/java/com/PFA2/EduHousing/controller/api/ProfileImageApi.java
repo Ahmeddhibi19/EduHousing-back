@@ -21,7 +21,7 @@ public interface ProfileImageApi {
             @ApiResponse(responseCode = "400", description = "The object profile image is not valid !!!")
     })
     public String save(@RequestParam("file") MultipartFile file, @PathVariable("user_id") Integer userId) throws IOException ;
-    @GetMapping(value = APP_ROOT+"/profileImage/{profile_image_id}",produces = MediaType.IMAGE_PNG_VALUE)
+    @GetMapping(value = APP_ROOT+"/profileImage/admin/{profile_image_id}",produces = MediaType.IMAGE_PNG_VALUE)
     @Operation(summary = "search one profile image", description = "search profile image with the specified  ID ")
     @ApiResponses(value = {
             @ApiResponse(responseCode  = "200",description = "profile image found"),
@@ -35,11 +35,19 @@ public interface ProfileImageApi {
             @ApiResponse(responseCode = "404",description = "profile image not found !!!")
     })
     public byte[] findByUserId(@PathVariable("user_id") Integer userId);
-    @DeleteMapping(value = APP_ROOT+"/profileImage/delete_by_id/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = APP_ROOT+"/profileImage/admin/delete_by_id/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "delete profile image by id... ",description = "needs an existing profile image id.."/*,response = Void.class*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "profile image deleted successfully"),
             @ApiResponse(responseCode = "400",description = "something went wrong !!!")
     })
     public void deleteById(@PathVariable("id") Integer id);
+
+    @DeleteMapping(value = APP_ROOT+"/profileImage/delete_by_user_id/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "delete profile image by id... ",description = "needs an existing profile image id.."/*,response = Void.class*/)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",description = "profile image deleted successfully"),
+            @ApiResponse(responseCode = "400",description = "something went wrong !!!")
+    })
+    public void deleteByUserId(@PathVariable("id") Integer id);
 }

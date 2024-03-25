@@ -39,6 +39,8 @@ import java.util.Collections;
 
 import static com.PFA2.EduHousing.Utils.Constants.APP_ROOT;
 import static com.PFA2.EduHousing.Utils.Constants.AUTHENTICATION_ENDPOINT;
+import static com.PFA2.EduHousing.model.Permissions.*;
+import static com.PFA2.EduHousing.model.Roles.*;
 
 @Configuration
 @EnableWebSecurity
@@ -47,9 +49,11 @@ public class SecurityConfiguration  {
 
     private static final String[] WHITE_LIST_URLS = {
             AUTHENTICATION_ENDPOINT+"/authenticate",
-            "/admin/create/**",
-            "/homeowner/create/**",
-           "/api"+APP_ROOT+ "/student/create/**",
+            AUTHENTICATION_ENDPOINT+"/refresh_token",
+            "/api"+APP_ROOT+"/confirm-account",
+            "/api"+APP_ROOT+"/admin/create/**",
+            "/api"+APP_ROOT+"/homeowner/create/**",
+            "/api"+APP_ROOT+"/student/create/**",
             "/v2/api-docs",
             "/swagger-resources",
             "/swagger-resources/**",
@@ -114,6 +118,35 @@ public class SecurityConfiguration  {
                             req.requestMatchers(
                                     WHITE_LIST_URLS
                         ).permitAll()
+                                    .requestMatchers("/api"+APP_ROOT+"/admin/authorized/**").hasAnyRole(ADMIN.name())
+                                    .requestMatchers("/api"+APP_ROOT+"/city/admin/**").hasAnyRole(ADMIN.name())
+                                    .requestMatchers("/api"+APP_ROOT+"/apartment/homeowner/**").hasAnyRole(HOMEOWNER.name())
+                                    .requestMatchers("/api"+APP_ROOT+"/applicationFeedback/user/**").hasAnyAuthority(
+                                            HOMEOWNER_CREATE.name(),
+                                            STUDENT_CREATE.name(),
+                                            STUDENT_UPDATE.name(),
+                                            HOMEOWNER_UPDATE.name(),
+                                            STUDENT_DELETE.name(),
+                                            HOMEOWNER_DELETE.name()
+                                    )
+                                    .requestMatchers("/api"+APP_ROOT+"/apartmentImages/homeowner/**").hasAnyRole(HOMEOWNER.name())
+                                    .requestMatchers("/api"+APP_ROOT+"/college/admin/**").hasAnyRole(ADMIN.name())
+                                    .requestMatchers("/api"+APP_ROOT+"/favourites/student/**").hasAnyRole(STUDENT.name())
+                                    .requestMatchers("/api"+APP_ROOT+"/homeowner/admin/**").hasAnyRole(ADMIN.name())
+                                    .requestMatchers("/api"+APP_ROOT+"/homeowner/homeowner/**").hasAnyRole(HOMEOWNER.name())
+                                    .requestMatchers("/api"+APP_ROOT+"/profileImage/admin/**").hasAnyRole(ADMIN.name())
+                                    .requestMatchers("/api"+APP_ROOT+"/rentalDetails/homeowner/**").hasAnyRole(HOMEOWNER.name())
+                                    .requestMatchers("/api"+APP_ROOT+"/rentalDetails/homeowner_admin/**").hasAnyAuthority(ADMIN_READ.name(),HOMEOWNER_READ.name())
+                                    .requestMatchers("/api"+APP_ROOT+"/rentalDetails/student/**").hasAnyAuthority(STUDENT_READ.name(),ADMIN_READ.name())
+                                    .requestMatchers("/api"+APP_ROOT+"/rentalfeedback/student/**").hasAnyRole(STUDENT.name())
+                                    .requestMatchers("/api"+APP_ROOT+"/rentalfeedback/admin/**").hasAnyRole(ADMIN.name())
+                                    .requestMatchers("/api"+APP_ROOT+"/rentalfeedback/student_admin/**").hasAnyAuthority(STUDENT_READ.name(),ADMIN_READ.name())
+                                    .requestMatchers("/api"+APP_ROOT+"/request/student/**").hasAnyRole(STUDENT.name())
+                                    .requestMatchers("/api"+APP_ROOT+"request/admin_homeowner/**").hasAnyAuthority(ADMIN_READ.name(),HOMEOWNER_READ.name())
+                                    .requestMatchers("/api"+APP_ROOT+"/request/admin_student/**").hasAnyAuthority(ADMIN_READ.name(),STUDENT_READ.name())
+                                    .requestMatchers("/api"+APP_ROOT+"/request/homeowner/**").hasAnyRole(HOMEOWNER.name())
+                                    .requestMatchers("/api"+APP_ROOT+"/student/student/**").hasAnyRole(STUDENT.name())
+                                    .requestMatchers("/api"+APP_ROOT+"/student/admin/**").hasAnyRole(ADMIN.name())
                         .anyRequest().authenticated()
                 )
 

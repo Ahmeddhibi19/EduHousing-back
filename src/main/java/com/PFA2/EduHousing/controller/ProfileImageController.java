@@ -34,4 +34,9 @@ public class ProfileImageController implements ProfileImageApi {
     public void deleteById(Integer id) {
         profileImageService.deleteById(id);
     }
+
+    @Override
+    public void deleteByUserId(Integer id) {
+        profileImageService.deleteByUserId(id);
+    }
 }

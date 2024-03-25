@@ -15,7 +15,7 @@ import static com.PFA2.EduHousing.Utils.Constants.APP_ROOT;
 @Tag(name = "rental feedback")
 @RequestMapping("/api")
 public interface RentalFeedbackApi {
-    @PostMapping(value = APP_ROOT+"/rentalfeedback/create/{apartment_id}/{student_id}",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = APP_ROOT+"/rentalfeedback/student/create/{apartment_id}/{student_id}",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Save rental feedback", description = "Save rental feedback with the specified apartment ID and student ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode  = "200",description = "rental feedback saved successfully "),
@@ -29,14 +29,14 @@ public interface RentalFeedbackApi {
             @ApiResponse(responseCode = "404",description = "rental feedback not found !!!")
     })
     public RentalFeedbackdto findByStudentAndApartment(@PathVariable("student_id") Integer studentId,@PathVariable("apartment_id") Integer apartmentId);
-    @GetMapping(value = APP_ROOT+"/rentalfeedback/id/{rentalfeedback_id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = APP_ROOT+"/rentalfeedback/admin/id/{rentalfeedback_id}",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "search one rental feedback", description = "search rental feedback with the specified  ID ")
     @ApiResponses(value = {
             @ApiResponse(responseCode  = "200",description = "rental feedback found"),
             @ApiResponse(responseCode = "404",description = "rental feedback not found !!!")
     })
     public RentalFeedbackdto findById(@PathVariable("rentalfeedback_id") Integer id);
-    @GetMapping(value = APP_ROOT+"/rentalfeedback/student/{student_id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = APP_ROOT+"/rentalfeedback/student_admin/student/{student_id}",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "search list of rental feedback", description = "search rental feedbacks with the specified  student iD ")
     @ApiResponses(value = {
             @ApiResponse(responseCode  = "200",description = "rental feedback list found")
@@ -64,14 +64,14 @@ public interface RentalFeedbackApi {
 
     })
     public List<RentalFeedbackdto> getRentalFeedbackByApartmentIdAndRatingGreaterThan(@PathVariable("apartment_id") Integer apartmentId,@PathVariable("value") Integer value);
-    @DeleteMapping(value = APP_ROOT+"/rentalfeedback/delete_by_id/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = APP_ROOT+"/rentalfeedback/student/delete_by_id/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "delete rental feedback by id... ",description = "needs an existing rental feedback id.."/*,response = Void.class*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "rental feedback deleted successfully"),
             @ApiResponse(responseCode = "400",description = "something went wrong !!!")
     })
     public void deleteById(@PathVariable("id") Integer id);
-    @PutMapping(value = APP_ROOT+"/rentalfeedback/update",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = APP_ROOT+"/rentalfeedback/student/update",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "update rental feedback... ",description = "you can only update content and rating.."/*,response = Studentdto.class*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "rental feedback updated successfully"),

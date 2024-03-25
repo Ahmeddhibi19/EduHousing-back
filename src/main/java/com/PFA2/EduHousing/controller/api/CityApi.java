@@ -14,14 +14,14 @@ import static com.PFA2.EduHousing.Utils.Constants.APP_ROOT;
 @Tag(name = "city")
 @RequestMapping("/api")
 public interface CityApi {
-    @PostMapping(value = APP_ROOT+"/city/create",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = APP_ROOT+"/city/admin/create",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Save city", description = "Save valid city ")
     @ApiResponses(value = {
             @ApiResponse(responseCode  = "200",description = "city saved successfully "),
             @ApiResponse(responseCode = "400",description = "the object city is not valid !!!")
     })
     public Citydto save(@RequestBody Citydto citydto);
-    @GetMapping(value = APP_ROOT+"/city/{city_id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = APP_ROOT+"/city/id/{city_id}",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "search one city", description = "search city with the specified  ID ")
     @ApiResponses(value = {
             @ApiResponse(responseCode  = "200",description = "city found"),
@@ -49,14 +49,14 @@ public interface CityApi {
 
     })
     public List<Citydto> findAll();
-    @PutMapping(value = APP_ROOT+"/city/update",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = APP_ROOT+"/city/admin/update",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "update city... ",description = "you can only update name and postal code.."/*,response = Studentdto.class*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "city updated successfully"),
             @ApiResponse(responseCode = "400",description = "something went wrong !!!")
     })
     public Citydto update(@RequestBody Citydto citydto);
-    @DeleteMapping(value = APP_ROOT+"/city/delete_by_id/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = APP_ROOT+"/city/admin/delete_by_id/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "delete city by id... ",description = "needs an existing city id.."/*,response = Void.class*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "city deleted successfully"),

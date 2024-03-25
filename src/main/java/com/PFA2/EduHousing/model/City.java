@@ -21,9 +21,9 @@ public class City extends AbstractEntity{
     @Column(name = "postal_code")
     private String postalCode;
 
-    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Apartment> apartmentList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<College> collegeList = new ArrayList<>();
 }

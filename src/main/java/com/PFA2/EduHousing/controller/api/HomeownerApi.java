@@ -43,7 +43,7 @@ public interface HomeownerApi {
 
     })
     public List<Homeownerdto> findByFirstName(@PathVariable("first_name") String firstName);
-    @GetMapping(value = APP_ROOT+"/homeowner/all",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = APP_ROOT+"/homeowner/admin/all",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "find all homeowners.. ",description = "return list of all existing homeowners .."/*,responseContainer = "list<StudentDto>"*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "homeowners list found"),
@@ -57,21 +57,21 @@ public interface HomeownerApi {
             @ApiResponse(responseCode = "404",description = "no homeowner found with the provided phone number !!!")
     })
     public Homeownerdto findByPhoneNumber(@PathVariable("phone_number") String phoneNumber);
-    @PutMapping(value = APP_ROOT+"/homeowner/update",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = APP_ROOT+"/homeowner/homeowner/update",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "update homeowner... ",description = "you can only update first name, last name, phone number and address.."/*,response = Studentdto.class*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "homeowner updated successfully"),
             @ApiResponse(responseCode = "400",description = "something went wrong !!!")
     })
     public Homeownerdto update(@RequestBody Homeownerdto homeownerdto);
-    @DeleteMapping(value = APP_ROOT+"/homeowner/delete_by_phone/{phone_number}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = APP_ROOT+"/homeowner/admin/delete_by_phone/{phone_number}",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "delete homeowner by phone number... ",description = "needs an existing homeowner phone number.."/*,response = Void.class*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "homeowner deleted successfully"),
             @ApiResponse(responseCode = "400",description = "something went wrong !!!")
     })
     void deleteByPhoneNumber(@PathVariable("phone_number") String phoneNumber);
-    @DeleteMapping(value = APP_ROOT+"/homeowner/delete_by_email/{email}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = APP_ROOT+"/homeowner/admin/delete_by_email/{email}",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "delete homeowner by email... ",description = "needs an existing homeowner email.."/*response = Void.class*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "homeowner deleted successfully"),
@@ -79,7 +79,7 @@ public interface HomeownerApi {
     })
     void deleteByEmail(@PathVariable("email") String email);
 
-    @DeleteMapping(value = APP_ROOT+"/homeowner/delete_by_id/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = APP_ROOT+"/homeowner/admin/delete_by_id/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "delete homeowner by id... ",description = "needs an existing homeowner id.."/*,response = Void.class*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "homeowner deleted successfully"),

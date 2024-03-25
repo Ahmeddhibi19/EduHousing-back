@@ -31,7 +31,7 @@ public class RentalDetails extends AbstractEntity{
 
 
 
-    @OneToMany(mappedBy = "rentalDetails", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "rentalDetails", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
     private Set<Request> requestSet= new HashSet<>();
 
     @ManyToOne

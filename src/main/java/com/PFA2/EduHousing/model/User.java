@@ -2,6 +2,10 @@ package com.PFA2.EduHousing.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
 
 @Data
 @Builder
@@ -12,7 +16,7 @@ import lombok.*;
 @Table(name = "user")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "role", discriminatorType = DiscriminatorType.STRING)
-public class User extends AbstractEntity{
+public class User extends AbstractEntity implements UserDetails {
 
     @Column(name = "first_name")
     private String firstName;
@@ -32,10 +36,48 @@ public class User extends AbstractEntity{
     @Column(name = "role", insertable = false, updatable = false)
     @Enumerated(EnumType.STRING)
     private Roles role;
+    @Column(name = "is_enabled")
+    private Boolean isEnabled;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private ProfileImage profileImage;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private ApplicationFeedback applicationFeedback;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private RefreshToken refreshToken;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ConfirmationToken confirmationToken;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return  role.getAuthorities();
+    }
+
+    @Override
+    public String getUsername() {
+        return null;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
 }

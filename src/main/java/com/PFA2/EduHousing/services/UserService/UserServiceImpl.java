@@ -17,7 +17,7 @@ public class UserServiceImpl implements UserService{
     }
     @Override
     public Integer getUserId(UserDetails userDetails) {
-        User user=userRepository.findUserByEmail(userDetails.getUsername()).orElseThrow(
+        User user=userRepository.findUserByEmailIgnoreCase(userDetails.getUsername()).orElseThrow(
                 ()->new EntityNotFoundException(
                         "no user with the provided email",
                         ErrorCodes.USER_NOT_FOUND
@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User findUserByEmail(String email) {
-        User user=userRepository.findUserByEmail(email).orElseThrow(
+        User user=userRepository.findUserByEmailIgnoreCase(email).orElseThrow(
                 ()->new EntityNotFoundException(
                         "no user with the provided email",
                         ErrorCodes.USER_NOT_FOUND

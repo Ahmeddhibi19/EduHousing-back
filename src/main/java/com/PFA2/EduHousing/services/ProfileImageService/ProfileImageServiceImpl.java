@@ -115,4 +115,13 @@ public class ProfileImageServiceImpl implements ProfileImageService{
         profileImageRepository.deleteById(id);
 
     }
+
+    @Override
+    public void deleteByUserId(Integer userId) {
+        if(userId==null){
+            log.error("user id is null");
+            return ;
+        }
+        profileImageRepository.deleteProfileImageByUserId(userId);
+    }
 }

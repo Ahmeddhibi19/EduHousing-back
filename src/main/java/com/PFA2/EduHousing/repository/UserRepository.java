@@ -12,7 +12,7 @@ public interface UserRepository extends JpaRepository<User,Integer> {
 
     public Optional<User> findUserByFirstName(String firstName);
 
-    public Optional<User> findUserByEmail(String email);
+    public Optional<User> findUserByEmailIgnoreCase(String email);
 
     public Optional<User> findUserByPhoneNumber(String phoneNumber);
 

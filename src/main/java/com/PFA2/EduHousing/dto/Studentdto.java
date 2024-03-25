@@ -38,6 +38,8 @@ public class Studentdto  {
 
     private String address;
 
+    private Boolean isEnabled;
+
     private byte[] profileImage1;
    // private FileOutputStream image;
     private ProfileImagedto profileImage;
@@ -74,6 +76,7 @@ public class Studentdto  {
                 .phoneNumber(student.getPhoneNumber())
                 .role(student.getRole())
                 .address(student.getAddress())
+                .isEnabled(student.getIsEnabled())
                 //.image()
                 .profileImage1(imageData)
                 /*.profileImage(
@@ -131,6 +134,7 @@ public class Studentdto  {
         student.setPhoneNumber(studentdto.getPhoneNumber());
         student.setRole(studentdto.getRole());
         student.setAddress(studentdto.getAddress());
+        student.setIsEnabled(studentdto.getIsEnabled());
         student.setProfileImage(
                 studentdto.getProfileImage()!=null?
                         ProfileImagedto.toEntity(studentdto.getProfileImage()):null

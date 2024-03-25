@@ -59,14 +59,14 @@ public interface StudentApi {
     })
     Studentdto findByPhoneNumber(@PathVariable("phone_number") String phoneNumber);
 
-    @PutMapping(value = APP_ROOT+"/student/update",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = APP_ROOT+"/student/student/update",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "update student... ",description = "you can only update first name, last name, phone number and address.."/*,response = Studentdto.class*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "student updated successfully"),
             @ApiResponse(responseCode = "400",description = "something went wrong !!!")
     })
     Studentdto update(@RequestBody Studentdto studentdto);
-    @PutMapping(value = APP_ROOT+"/student/update_college/{studentId}/{collegeId}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = APP_ROOT+"/student/student/update_college/{studentId}/{collegeId}",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "update student college... ",description = "needs only the id of the student/id of the new college.."/*,response = Studentdto.class*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "student's college updated successfully"),
@@ -74,7 +74,7 @@ public interface StudentApi {
     })
     Studentdto updateCollege(@PathVariable("studentId") Integer studentId,@PathVariable("collegeId") Integer collegeId);
 
-    @DeleteMapping(value = APP_ROOT+"/student/delete_by_id/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = APP_ROOT+"/student/admin/delete_by_id/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "delete student by id... ",description = "needs an existing student id.."/*,response = Void.class*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "student deleted successfully"),
@@ -82,7 +82,7 @@ public interface StudentApi {
     })
     void deleteById(@PathVariable("id") Integer id);
 
-    @DeleteMapping(value = APP_ROOT+"/student/delete_by_phone/{phone_number}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = APP_ROOT+"/student/admin/delete_by_phone/{phone_number}",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "delete student by phone number... ",description = "needs an existing student phone number.."/*,response = Void.class*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "student deleted successfully"),
@@ -90,7 +90,7 @@ public interface StudentApi {
     })
     void deleteByPhoneNumber(@PathVariable("phone_number") String phoneNumber);
 
-    @DeleteMapping(value = APP_ROOT+"/student/delete_by_email/{email}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = APP_ROOT+"/student/admin/delete_by_email/{email}",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "delete student by email... ",description = "needs an existing student email.."/*response = Void.class*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "student deleted successfully"),
@@ -98,7 +98,7 @@ public interface StudentApi {
     })
     void deleteByEmail(@PathVariable("email") String email);
 
-    @GetMapping(value = APP_ROOT+"/student/all",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = APP_ROOT+"/student/admin/all",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "find all students.. ",description = "return list of all existing student .."/*,responseContainer = "list<StudentDto>"*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "student list found"),
@@ -106,7 +106,7 @@ public interface StudentApi {
     })
     List<Studentdto> findAll();
 
-    @GetMapping(value = APP_ROOT+"/student/college/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = APP_ROOT+"/student/admin/college/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "find all students by college Id.. ",description = "needs an existing college Id .."/*responseContainer = "list<StudentDto>"*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "student list found"),

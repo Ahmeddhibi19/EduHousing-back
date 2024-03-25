@@ -25,8 +25,8 @@ public class ApplicationUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         com.PFA2.EduHousing.model.User user=userService.findUserByEmail(email);
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority (user.getRole().toString()));
-        return new ExtendedUser(user.getEmail(),user.getPassword(),authorities);
+        /*authorities.add(new SimpleGrantedAuthority (user.getRole().toString()));*/
+        //List<SimpleGrantedAuthority> authorities = new ArrayList<>(user.getRole().getAuthorities());
+        return new ExtendedUser(user.getEmail(),user.getPassword(),user.getAuthorities());
     }
 }

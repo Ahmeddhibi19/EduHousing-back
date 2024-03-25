@@ -16,7 +16,7 @@ import static com.PFA2.EduHousing.Utils.Constants.APP_ROOT;
 @Tag(name = "apartment")
 @RequestMapping("/api")
 public interface ApartmentApi {
-    @PostMapping(value = APP_ROOT+"/apartment/create/{homeowner_id}/{city_id}",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = APP_ROOT+"/apartment/homeowner/create/{homeowner_id}/{city_id}",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Save apartment", description = "Save apartment with the specified homeowner ID and college ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode  = "200",description = "apartment saved successfully "),
@@ -88,7 +88,7 @@ public interface ApartmentApi {
 
     })
     public List<Apartmentdto> findAllByCityIdNotIsRented(@PathVariable("city_id") Integer cityId);
-    @DeleteMapping(value = APP_ROOT+"/apartment/delete_by_id/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = APP_ROOT+"/apartment/homeowner/delete_by_id/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "delete apartment by id... ",description = "needs an existing apartment id.."/*,response = Void.class*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "apartment deleted successfully"),
@@ -96,7 +96,7 @@ public interface ApartmentApi {
     })
     public void deleteById(@PathVariable("id") Integer id);
 
-    @PutMapping(value = APP_ROOT+"/apartment/update",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = APP_ROOT+"/apartment/homeowner/update",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "update apartment... ",description = "you can only update latitude,longitude,type,address and description.."/*,response = Studentdto.class*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "apartment updated successfully"),

@@ -1,7 +1,6 @@
 package com.PFA2.EduHousing.model.auth;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
@@ -16,7 +15,10 @@ public class ExtendedUser extends User {
                         Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
     }
-
+    /*public void setIsEnabled(ExtendedUser extendedUser){
+        ;
+    }
+*/
    /* public ExtendedUser(String username, String password, Integer id,
                         Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);

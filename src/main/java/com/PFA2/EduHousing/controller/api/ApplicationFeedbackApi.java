@@ -15,7 +15,7 @@ import static com.PFA2.EduHousing.Utils.Constants.APP_ROOT;
 @Tag(name = "ApplicationFeedback")
 @RequestMapping("/api")
 public interface ApplicationFeedbackApi {
-    @PostMapping(value = APP_ROOT+"/applicationFeedback/create/{user_id}",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = APP_ROOT+"/applicationFeedback/user/create/{user_id}",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Save application feedback", description = "Save application feedback with the specified user ID ")
     @ApiResponses(value = {
             @ApiResponse(responseCode  = "200",description = "application feedback saved successfully "),
@@ -47,14 +47,14 @@ public interface ApplicationFeedbackApi {
 
     })
     public List<ApplicationFeedbackdto> findAllByUserName(@PathVariable("user_name") String userName);
-    @PutMapping(value = APP_ROOT+"/applicationFeedback/update",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = APP_ROOT+"/applicationFeedback/user/update",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "update application Feedback... ",description = "you can only update rating and content.."/*,response = Studentdto.class*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "application Feedback updated successfully"),
             @ApiResponse(responseCode = "400",description = "something went wrong !!!")
     })
     public ApplicationFeedbackdto update(@RequestBody ApplicationFeedbackdto applicationFeedbackdto);
-    @DeleteMapping(value = APP_ROOT+"/applicationFeedback/delete_by_id/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = APP_ROOT+"/applicationFeedback/user/delete_by_id/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "delete application Feedback by id... ",description = "needs an existing application Feedback id.."/*,response = Void.class*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "application Feedback deleted successfully"),

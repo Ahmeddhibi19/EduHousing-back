@@ -19,15 +19,15 @@ public class Student extends User{
     private String address;
 
 
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Favourites> favouritesSet = new HashSet<>();
 
 
-    @OneToMany(mappedBy = "student",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "student", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private Set<Request> requestSet = new HashSet<>();
 
 
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<RentalFeedback> rentalFeedbackSet = new HashSet<>();
 
     @ManyToOne

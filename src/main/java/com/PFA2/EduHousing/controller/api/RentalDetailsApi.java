@@ -16,7 +16,7 @@ import static com.PFA2.EduHousing.Utils.Constants.APP_ROOT;
 @Tag(name = "rentalDetails")
 @RequestMapping("/api")
 public interface RentalDetailsApi {
-    @PostMapping(value = APP_ROOT+"/rentalDetails/create/{apartment_id}",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = APP_ROOT+"/rentalDetails/homeowner/create/{apartment_id}",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Save rentalDetails", description = "Save rentalDetails with the specified apartment ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode  = "200",description = "rentalDetails saved successfully "),
@@ -30,7 +30,7 @@ public interface RentalDetailsApi {
             @ApiResponse(responseCode = "404",description = "rentalDetails not found !!!")
     })
     public RentalDetailsdto findById(@PathVariable("rentalDetails_id") Integer id);
-    @GetMapping(value = APP_ROOT+"/rentalDetails/apartment/{apartment_id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = APP_ROOT+"/rentalDetails/homeowner_admin/apartment/{apartment_id}",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "search list of rentalDetails", description = "search rentalDetails with the specified  apartment iD ")
     @ApiResponses(value = {
             @ApiResponse(responseCode  = "200",description = "rentalDetails list found")
@@ -51,7 +51,7 @@ public interface RentalDetailsApi {
 
     })
     public List<RentalDetailsdto> findRentalByStartDate(@PathVariable("start_date") Date val);
-    @GetMapping(value = APP_ROOT+"/rentalDetails/validated/apartment/{apartment_id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = APP_ROOT+"/rentalDetails/homeowner_admin/validated/apartment/{apartment_id}",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "search list of rentalDetails", description = "search history of rental details by apartment ")
     @ApiResponses(value = {
             @ApiResponse(responseCode  = "200",description = "rentalDetails list found")
@@ -79,14 +79,14 @@ public interface RentalDetailsApi {
 
     })
     public List<RentalDetailsdto> getRentalHistoryByStudent(@PathVariable("student_id") Integer studentId);
-    @PutMapping(value = APP_ROOT+"/rentalDetails/update",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = APP_ROOT+"/rentalDetails/homeowner/update",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "update rentalDetails... ",description = "you can only update monthly amount and description.."/*,response = Studentdto.class*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "rentalDetails updated successfully"),
             @ApiResponse(responseCode = "400",description = "something went wrong !!!")
     })
     public RentalDetailsdto update(@RequestBody RentalDetailsdto rentalDetailsdto);
-    @DeleteMapping(value = APP_ROOT+"/rentalDetails/delete_by_id/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = APP_ROOT+"/rentalDetails/homeowner/delete_by_id/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "delete rentalDetails by id... ",description = "needs an existing rentalDetails id.."/*,response = Void.class*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "rentalDetails deleted successfully"),

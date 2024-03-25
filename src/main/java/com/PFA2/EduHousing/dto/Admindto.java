@@ -39,7 +39,7 @@ public class Admindto  {
                 .firstName(admin.getFirstName())
                 .lastName(admin.getLastName())
                 .email(admin.getEmail())
-                .password(admin.getPassword())
+                //.password(admin.getPassword())
                 .phoneNumber(admin.getPhoneNumber())
                 .role(admin.getRole())
                 .isActivated(admin.getIsActivated())

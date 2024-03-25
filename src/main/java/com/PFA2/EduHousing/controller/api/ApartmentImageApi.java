@@ -17,7 +17,7 @@ import static com.PFA2.EduHousing.Utils.Constants.APP_ROOT;
 @Tag(name = "apartmentImages")
 @RequestMapping("/api")
 public interface ApartmentImageApi {
-    @PostMapping(value = APP_ROOT+"/apartmentImages/create/{apartment_id}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = APP_ROOT+"/apartmentImages/homeowner/create/{apartment_id}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Save apartment image", description = "Save apartment image with the specified apartment ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode  = "200",description = "apartment image saved successfully "),
@@ -45,7 +45,7 @@ public interface ApartmentImageApi {
 
     })
     public List<byte[]> findAll();
-    @DeleteMapping(value = APP_ROOT+"/apartmentImages/delete_by_id/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = APP_ROOT+"/apartmentImages/homeowner/delete_by_id/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "delete apartment image by id... ",description = "needs an existing apartment image id.."/*,response = Void.class*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "apartment image deleted successfully"),

@@ -15,7 +15,7 @@ import static com.PFA2.EduHousing.Utils.Constants.APP_ROOT;
 @Tag(name = "college")
 @RequestMapping("/api")
 public interface CollegeApi {
-    @PostMapping(value = APP_ROOT+"/college/create/{city_id}",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = APP_ROOT+"/college/admin/create/{city_id}",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Save college", description = "Save college with the specified city ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode  = "200",description = "college saved successfully "),
@@ -50,14 +50,14 @@ public interface CollegeApi {
             @ApiResponse(responseCode = "404",description = "college not found !!!")
     })
     public List<Collegedto> findByCityId(@PathVariable("city_id") Integer id);
-    @PutMapping(value = APP_ROOT+"/college/update",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = APP_ROOT+"/college/admin/update",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "update college... ",description = "you can only update the name.."/*,response = Studentdto.class*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "college updated successfully"),
             @ApiResponse(responseCode = "400",description = "something went wrong !!!")
     })
     public Collegedto update(@RequestBody Collegedto collegedto);
-    @DeleteMapping(value = APP_ROOT+"/college/delete_by_id/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = APP_ROOT+"/college/admin/delete_by_id/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "delete college by id... ",description = "needs an existing college id.."/*,response = Void.class*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "college deleted successfully"),

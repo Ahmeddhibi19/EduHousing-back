@@ -17,7 +17,7 @@ public class Homeowner extends User{
     @Column(name = "address")
     private String address;
 
-    @OneToMany(mappedBy = "homeowner", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "homeowner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Apartment> apartmentList = new ArrayList<>();
 
 

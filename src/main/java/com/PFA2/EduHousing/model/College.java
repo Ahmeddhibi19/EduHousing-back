@@ -27,13 +27,13 @@ public class College extends AbstractEntity{
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "college", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "college", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Distance> distanceList = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "city")
     private City city;
 
-    @OneToMany(mappedBy = "college",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "college", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Student> studentList = new ArrayList<>();
 }

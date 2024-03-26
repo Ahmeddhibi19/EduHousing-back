@@ -50,7 +50,9 @@ public class SecurityConfiguration  {
     private static final String[] WHITE_LIST_URLS = {
             AUTHENTICATION_ENDPOINT+"/authenticate",
             AUTHENTICATION_ENDPOINT+"/refresh_token",
-            "/api"+APP_ROOT+"/confirm-account",
+            "/api"+APP_ROOT+"/confirm-account/admin",
+            "/api"+APP_ROOT+"/confirm-account/homeowner",
+            "/api"+APP_ROOT+"/confirm-account/student",
             "/api"+APP_ROOT+"/admin/create/**",
             "/api"+APP_ROOT+"/homeowner/create/**",
             "/api"+APP_ROOT+"/student/create/**",

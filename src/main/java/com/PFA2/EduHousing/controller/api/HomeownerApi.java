@@ -21,7 +21,7 @@ public interface HomeownerApi {
             @ApiResponse(responseCode  = "200",description = "homeowner saved successfully "),
             @ApiResponse(responseCode = "400",description = "the object homeowner is not valid !!!")
     })
-    public Homeownerdto save(@RequestBody Homeownerdto homeownerdto);
+    public String save(@RequestBody Homeownerdto homeownerdto);
     @GetMapping(value = APP_ROOT+"/homeowner/{homeowner_id}",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "search homeowner by Id... ",description = "needs the homeowner Id.."/*,response = Studentdto.class*/)
     @ApiResponses(value = {

@@ -72,7 +72,7 @@ public class Studentdto  {
                 .firstName(student.getFirstName())
                 .lastName(student.getLastName())
                 .email(student.getEmail())
-                .password(student.getPassword())
+                //.password(student.getPassword())
                 .phoneNumber(student.getPhoneNumber())
                 .role(student.getRole())
                 .address(student.getAddress())

@@ -1,6 +1,9 @@
 package com.PFA2.EduHousing.services.refreshTokenService;
 
+import com.PFA2.EduHousing.exceptions.EntityNotFoundException;
+import com.PFA2.EduHousing.exceptions.ErrorCodes;
 import com.PFA2.EduHousing.model.RefreshToken;
+import com.PFA2.EduHousing.model.User;
 import com.PFA2.EduHousing.repository.RefreshTokenRepository;
 import com.PFA2.EduHousing.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -26,10 +29,18 @@ public class RefreshTokenServiceImpl implements RefreshTokenService{
         this.userRepository=userRepository;
     }
     public RefreshToken createRefreshToken(String email){
+        User user=userRepository.findUserByEmailIgnoreCase(email).orElseThrow(
+                ()->new EntityNotFoundException("no user with this email :"+email,
+                        ErrorCodes.USER_NOT_FOUND)
+        );
+        Optional<RefreshToken> existingRefreshToken=refreshTokenRepository.findRefreshTokenByUserId(user.getId());
+        if (!existingRefreshToken.isEmpty()){
+            return existingRefreshToken.get();
+        }
         RefreshToken refreshToken=RefreshToken.builder()
                 .user(
-                        userRepository.findUserByEmailIgnoreCase(email).get()!=null?
-                                userRepository.findUserByEmailIgnoreCase(email).get():null
+                        user!=null?
+                                user:null
                 )
                 .token(UUID.randomUUID().toString())
                 .expiryDate(Instant.now().plusMillis(1000 * 60 * 60 * 10))

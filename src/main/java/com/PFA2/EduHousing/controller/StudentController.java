@@ -64,7 +64,7 @@ public class StudentController implements StudentApi {
 
         Student studentModel=Studentdto.toEntity(student);
         ConfirmationToken confirmationToken = new ConfirmationToken(studentModel);
-        confirmationToken.setExpirationDate(Instant.now().plusMillis(1000*60*2));
+        confirmationToken.setExpirationDate(Instant.now().plusMillis(1000*60*30));
         confirmationTokenRepository.save(confirmationToken);
         SimpleMailMessage mailMessage=new SimpleMailMessage();
 
@@ -72,13 +72,13 @@ public class StudentController implements StudentApi {
         mailMessage.setSubject("Complete registration");
        // mailMessage.setFrom("adhibi345@gmail.com");
         mailMessage.setText("To confirm your account , please click on the link below and note that the link expires after 30min :"
-        +"http://localhost:8081/api"+APP_ROOT+"/confirm-account?token="+confirmationToken.getConfirmationToken()
+        +"http://localhost:8081/api"+APP_ROOT+"/confirm-account/student?token="+confirmationToken.getConfirmationToken()
                 );
 
         emailService.sendEmail(mailMessage);
         return "A verification email is sent to you to the provided email";
     }
-    @RequestMapping(value = APP_ROOT+"/confirm-account",method = {RequestMethod.GET,RequestMethod.POST})
+    @RequestMapping(value = APP_ROOT+"/confirm-account/student",method = {RequestMethod.GET,RequestMethod.POST})
     @Operation(summary = "confirm account email... ",description = "the confirmation email is sent to your email .."/*,response = Void.class*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "account confirmed successfully"),
@@ -92,12 +92,12 @@ public class StudentController implements StudentApi {
         if (token.get().getExpirationDate().isBefore(Instant.now())) {
             return "the link has expired";
         }
-        Studentdto student=studentService.findByEmail(token.get().getUser().getEmail());
-        student.setIsEnabled(true);
-        studentRepository.save(Studentdto.toEntity(student));
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority (student.getRole().toString()));
-        ExtendedUser user = new ExtendedUser(student.getEmail(), student.getPassword(), authorities);
+        Optional<Student> student=studentRepository.findStudentByEmail(token.get().getUser().getEmail());
+        student.get().setIsEnabled(true);
+        studentRepository.save(student.get());
+        /*List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority (student.getRole().toString()));*/
+        ExtendedUser user = new ExtendedUser(student.get().getEmail(), student.get().getPassword(), student.get().getAuthorities());
         return jwtUtils.generateToken(user);
     }
 

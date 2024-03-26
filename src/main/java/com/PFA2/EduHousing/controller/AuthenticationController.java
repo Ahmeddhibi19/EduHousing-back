@@ -64,9 +64,9 @@ public class AuthenticationController {
                 .map(refreshTokenService::verifyExpiration)
                 .map(RefreshToken::getUser)
                 .map(user -> {
-                    List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-                    authorities.add(new SimpleGrantedAuthority (user.getRole().toString()));
-                    ExtendedUser extendedUser= new ExtendedUser(user.getEmail(), user.getPassword(), authorities);
+                    /*List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+                    authorities.add(new SimpleGrantedAuthority (user.getRole().toString()));*/
+                    ExtendedUser extendedUser= new ExtendedUser(user.getEmail(), user.getPassword(), user.getAuthorities());
                     String accessToken= jwtUtils.generateToken(extendedUser);
                     return AuthenticationResponse.builder()
                             .accessToken(accessToken)

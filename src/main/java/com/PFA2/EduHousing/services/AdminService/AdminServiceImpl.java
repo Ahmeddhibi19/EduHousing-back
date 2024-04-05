@@ -1,16 +1,16 @@
 package com.PFA2.EduHousing.services.AdminService;
 
 import com.PFA2.EduHousing.dto.Admindto;
-import com.PFA2.EduHousing.dto.Homeownerdto;
 import com.PFA2.EduHousing.exceptions.EntityNotFoundException;
 import com.PFA2.EduHousing.exceptions.ErrorCodes;
 import com.PFA2.EduHousing.exceptions.InvalidEntityException;
 import com.PFA2.EduHousing.model.Admin;
-import com.PFA2.EduHousing.model.Homeowner;
+import com.PFA2.EduHousing.model.ConnexionStatus;
 import com.PFA2.EduHousing.model.Roles;
-import com.PFA2.EduHousing.repository.AdminRepository;
+import com.PFA2.EduHousing.model.chat.MongoUser;
+import com.PFA2.EduHousing.repository.jpa.AdminRepository;
+import com.PFA2.EduHousing.repository.mongo.MonGoUserRepository;
 import com.PFA2.EduHousing.validator.AdminValidator;
-import com.PFA2.EduHousing.validator.HomeownerValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,14 +27,17 @@ public class AdminServiceImpl implements AdminService {
 
     private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MonGoUserRepository monGoUserRepository;
 
     @Autowired
     public AdminServiceImpl(
             AdminRepository adminRepository,
-            PasswordEncoder passwordEncoder
+            PasswordEncoder passwordEncoder,
+            MonGoUserRepository monGoUserRepository
     ){
         this.adminRepository=adminRepository;
         this.passwordEncoder=passwordEncoder;
+        this.monGoUserRepository=monGoUserRepository;
     }
 
     @Override
@@ -57,7 +60,14 @@ public class AdminServiceImpl implements AdminService {
         }
         admindto.setRole(Roles.ADMIN);
         admindto.setPassword(passwordEncoder.encode(admindto.getPassword()));
-
+        admindto.setStatus(ConnexionStatus.ONLINE);
+        MongoUser mongoUser=MongoUser.builder()
+                //.id(admindto.getId().toString())
+                .fullName(admindto.getFirstName()+" "+admindto.getLastName())
+                .status(admindto.getStatus())
+                .build();
+        monGoUserRepository.save(mongoUser);
+        //monGoUserRepository.save(Admindto.toEntity(admindto));
         return Admindto.fromEntity(
                 adminRepository.save(
                         Admindto.toEntity(admindto)

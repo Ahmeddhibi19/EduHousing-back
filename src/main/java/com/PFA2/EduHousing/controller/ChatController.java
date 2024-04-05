@@ -1,0 +1,43 @@
+package com.PFA2.EduHousing.controller;
+
+import com.PFA2.EduHousing.Utils.ChatNotification;
+import com.PFA2.EduHousing.model.chat.Chat;
+import com.PFA2.EduHousing.services.chatService.ChatService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.List;
+
+@Controller
+@RequiredArgsConstructor
+public class ChatController {
+    private final SimpMessagingTemplate messagingTemplate;
+    private final ChatService chatMessageService;
+
+    @MessageMapping("/chat")
+    public void processMessage(@Payload Chat chatMessage) {
+        Chat savedMsg = chatMessageService.save(chatMessage);
+        messagingTemplate.convertAndSendToUser(
+                chatMessage.getRecipientId().toString(), "/queue/messages",
+                new ChatNotification(
+                        savedMsg.getId(),
+                        savedMsg.getSenderId(),
+                        savedMsg.getRecipientId(),
+                        savedMsg.getContent()
+                )
+        );
+    }
+
+    @GetMapping("/messages/{senderId}/{recipientId}")
+    public ResponseEntity<List<Chat>> findChatMessages(@PathVariable Integer senderId,
+                                                       @PathVariable Integer recipientId) {
+        return ResponseEntity
+                .ok(chatMessageService.findChatMessages(senderId, recipientId));
+    }
+}

@@ -1,4 +1,4 @@
-package com.PFA2.EduHousing.repository;
+package com.PFA2.EduHousing.repository.jpa;
 
 import com.PFA2.EduHousing.model.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+@Repository("admin")
 public interface AdminRepository extends JpaRepository<Admin,Integer> {
 
     public Optional<Admin> findAdminByEmail(String email);

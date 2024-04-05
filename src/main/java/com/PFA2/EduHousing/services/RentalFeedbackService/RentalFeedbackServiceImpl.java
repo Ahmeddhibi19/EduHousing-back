@@ -7,13 +7,12 @@ import com.PFA2.EduHousing.exceptions.InvalidEntityException;
 import com.PFA2.EduHousing.model.Apartment;
 import com.PFA2.EduHousing.model.RentalFeedback;
 import com.PFA2.EduHousing.model.Student;
-import com.PFA2.EduHousing.repository.ApartmentRepository;
-import com.PFA2.EduHousing.repository.RentalFeedbackRepository;
-import com.PFA2.EduHousing.repository.StudentRepository;
+import com.PFA2.EduHousing.repository.jpa.ApartmentRepository;
+import com.PFA2.EduHousing.repository.jpa.RentalFeedbackRepository;
+import com.PFA2.EduHousing.repository.jpa.StudentRepository;
 import com.PFA2.EduHousing.validator.RentalFeedbackValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;

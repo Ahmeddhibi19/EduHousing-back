@@ -40,6 +40,8 @@ public class Studentdto  {
 
     private Boolean isEnabled;
 
+    private ConnexionStatus status;
+
     private byte[] profileImage1;
    // private FileOutputStream image;
     private ProfileImagedto profileImage;
@@ -79,6 +81,7 @@ public class Studentdto  {
                 .isEnabled(student.getIsEnabled())
                 //.image()
                 .profileImage1(imageData)
+                .status(student.getStatus())
                 /*.profileImage(
                         student.getProfileImage()!=null?
                         ProfileImagedto.builder()
@@ -135,6 +138,7 @@ public class Studentdto  {
         student.setRole(studentdto.getRole());
         student.setAddress(studentdto.getAddress());
         student.setIsEnabled(studentdto.getIsEnabled());
+        student.setStatus(studentdto.getStatus());
         student.setProfileImage(
                 studentdto.getProfileImage()!=null?
                         ProfileImagedto.toEntity(studentdto.getProfileImage()):null

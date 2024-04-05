@@ -7,6 +7,7 @@ import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -15,6 +16,7 @@ import java.util.Objects;
 @Data
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
+@Document
 public class AbstractEntity implements Serializable {
 
     @Id

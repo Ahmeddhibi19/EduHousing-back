@@ -6,23 +6,22 @@ import com.PFA2.EduHousing.dto.Studentdto;
 import com.PFA2.EduHousing.model.ConfirmationToken;
 import com.PFA2.EduHousing.model.Student;
 import com.PFA2.EduHousing.model.auth.ExtendedUser;
-import com.PFA2.EduHousing.repository.ConfirmationTokenRepository;
-import com.PFA2.EduHousing.repository.StudentRepository;
+import com.PFA2.EduHousing.repository.jpa.ConfirmationTokenRepository;
+import com.PFA2.EduHousing.repository.jpa.StudentRepository;
 import com.PFA2.EduHousing.services.StudentService.StudentService;
+import com.PFA2.EduHousing.services.UserService.UserService;
 import com.PFA2.EduHousing.services.email.EmailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +34,7 @@ public class StudentController implements StudentApi {
     private final JwtUtils jwtUtils;
     private final EmailService emailService;
     private final StudentRepository studentRepository;
+    private final UserService userService;
 
     private final ConfirmationTokenRepository confirmationTokenRepository;
     @Autowired
@@ -43,13 +43,15 @@ public class StudentController implements StudentApi {
             JwtUtils jwtUtils,
             ConfirmationTokenRepository confirmationTokenRepository,
             EmailService emailService,
-            StudentRepository studentRepository
+            StudentRepository studentRepository,
+            UserService userService
     ){
         this.studentService=studentService;
         this.jwtUtils=jwtUtils;
         this.confirmationTokenRepository=confirmationTokenRepository;
         this.emailService=emailService;
         this.studentRepository=studentRepository;
+        this.userService=userService;
     }
 
     @Override
@@ -155,4 +157,5 @@ public class StudentController implements StudentApi {
     public List<Studentdto> findAllByCollegeId(Integer collegeId) {
         return studentService.findAllByCollegeId(collegeId);
     }
+
 }

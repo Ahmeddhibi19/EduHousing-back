@@ -1,7 +1,5 @@
 package com.PFA2.EduHousing.services.DistanceService;
 
-import com.PFA2.EduHousing.dto.Apartmentdto;
-import com.PFA2.EduHousing.dto.Collegedto;
 import com.PFA2.EduHousing.dto.Distancedto;
 import com.PFA2.EduHousing.exceptions.EntityNotFoundException;
 import com.PFA2.EduHousing.exceptions.ErrorCodes;
@@ -9,15 +7,14 @@ import com.PFA2.EduHousing.model.Apartment;
 import com.PFA2.EduHousing.model.City;
 import com.PFA2.EduHousing.model.College;
 import com.PFA2.EduHousing.model.Distance;
-import com.PFA2.EduHousing.repository.ApartmentRepository;
-import com.PFA2.EduHousing.repository.CityRepository;
-import com.PFA2.EduHousing.repository.CollegeRepository;
-import com.PFA2.EduHousing.repository.DistanceRepository;
+import com.PFA2.EduHousing.repository.jpa.ApartmentRepository;
+import com.PFA2.EduHousing.repository.jpa.CityRepository;
+import com.PFA2.EduHousing.repository.jpa.CollegeRepository;
+import com.PFA2.EduHousing.repository.jpa.DistanceRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

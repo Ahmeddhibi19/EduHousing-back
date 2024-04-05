@@ -6,7 +6,7 @@ import com.PFA2.EduHousing.exceptions.EntityNotFoundException;
 import com.PFA2.EduHousing.exceptions.ErrorCodes;
 import com.PFA2.EduHousing.exceptions.InvalidEntityException;
 import com.PFA2.EduHousing.model.*;
-import com.PFA2.EduHousing.repository.*;
+import com.PFA2.EduHousing.repository.jpa.*;
 import com.PFA2.EduHousing.validator.ApartmentValidator;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
-import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

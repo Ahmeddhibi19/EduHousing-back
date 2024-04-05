@@ -10,6 +10,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
 import static com.PFA2.EduHousing.Utils.Constants.APP_ROOT;
@@ -18,13 +21,15 @@ import java.util.List;
 @Tag(name = "student")
 @RequestMapping("/api")
 public interface StudentApi {
+    @MessageMapping("/user.addUser")
+    @SendTo("/user/topic")
     @PostMapping(value = APP_ROOT+"/student/create/{college_id}",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Save student", description = "Save student with the specified college ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode  = "200",description = "student saved successfully "),
             @ApiResponse(responseCode = "400",description = "the object student is not valid !!!")
     })
-    String save(@RequestBody Studentdto studentdto ,@PathVariable("college_id") Integer collegeId);
+    String save(@RequestBody @Payload Studentdto studentdto , @PathVariable("college_id") Integer collegeId);
 
 
     @GetMapping(value = APP_ROOT+"/student/{studentId}",produces = MediaType.APPLICATION_JSON_VALUE)

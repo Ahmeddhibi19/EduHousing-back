@@ -35,6 +35,9 @@ public class Homeownerdto  {
     private Roles role;
 
     private String address;
+
+    private ConnexionStatus status;
+
     private Boolean isEnabled;
 
 
@@ -60,6 +63,7 @@ public class Homeownerdto  {
                 .role(homeowner.getRole())
                 .address(homeowner.getAddress())
                 .isEnabled(homeowner.getIsEnabled())
+                .status(homeowner.getStatus())
                 .profileImage(
                         homeowner.getProfileImage()!=null?
                         ProfileImagedto.builder()
@@ -95,6 +99,7 @@ public class Homeownerdto  {
         homeowner.setPhoneNumber(homeownerdto.getPhoneNumber());
         homeowner.setRole(homeownerdto.getRole());
         homeowner.setIsEnabled(homeownerdto.getIsEnabled());
+        homeowner.setStatus(homeownerdto.getStatus());
         homeowner.setProfileImage(
                 homeownerdto.getProfileImage()!=null?
                         ProfileImagedto.toEntity(homeownerdto.getProfileImage()):null

@@ -5,9 +5,12 @@ import com.PFA2.EduHousing.dto.Homeownerdto;
 import com.PFA2.EduHousing.exceptions.EntityNotFoundException;
 import com.PFA2.EduHousing.exceptions.ErrorCodes;
 import com.PFA2.EduHousing.exceptions.InvalidEntityException;
+import com.PFA2.EduHousing.model.ConnexionStatus;
 import com.PFA2.EduHousing.model.Homeowner;
 import com.PFA2.EduHousing.model.Roles;
-import com.PFA2.EduHousing.repository.HomeownerRepository;
+import com.PFA2.EduHousing.model.chat.MongoUser;
+import com.PFA2.EduHousing.repository.jpa.HomeownerRepository;
+import com.PFA2.EduHousing.repository.mongo.MonGoUserRepository;
 import com.PFA2.EduHousing.validator.HomeownerValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +27,13 @@ import java.util.stream.Collectors;
 public class HomeownerServiceImpl implements HomeownerService{
     private final HomeownerRepository homeownerRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MonGoUserRepository monGoUserRepository;
 
    @Autowired
-   public HomeownerServiceImpl(HomeownerRepository homeownerRepository,PasswordEncoder passwordEncoder){
+   public HomeownerServiceImpl(HomeownerRepository homeownerRepository,PasswordEncoder passwordEncoder,MonGoUserRepository monGoUserRepository){
        this.homeownerRepository=homeownerRepository;
        this.passwordEncoder=passwordEncoder;
+       this.monGoUserRepository=monGoUserRepository;
    }
     @Override
     public Homeownerdto save(Homeownerdto homeownerdto) {
@@ -49,9 +54,16 @@ public class HomeownerServiceImpl implements HomeownerService{
             log.error("homeowner's phone number all ready exists {}",homeownerdto);
             throw new InvalidEntityException("User with this email all ready exists with this email",ErrorCodes.USER_ALL_READY_EXISTS);
         }
-       homeownerdto.setRole(Roles.HOMEOWNER);
+        homeownerdto.setRole(Roles.HOMEOWNER);
         homeownerdto.setPassword(passwordEncoder.encode(homeownerdto.getPassword()));
-
+        homeownerdto.setStatus(ConnexionStatus.ONLINE);
+        MongoUser mongoUser=MongoUser.builder()
+               // .id(homeownerdto.getId().toString())
+                .fullName(homeownerdto.getFirstName()+" "+homeownerdto.getLastName())
+                .status(homeownerdto.getStatus())
+                .build();
+        monGoUserRepository.save(mongoUser);
+        //monGoUserRepository.save(Homeownerdto.toEntity(homeownerdto));
         return Homeownerdto.fromEntity(
                 homeownerRepository.save(
                         Homeownerdto.toEntity(homeownerdto)

@@ -1,12 +1,11 @@
 package com.PFA2.EduHousing.services.ProfileImageService;
 
 import com.PFA2.EduHousing.Utils.ImageUtils;
-import com.PFA2.EduHousing.dto.ProfileImagedto;
 import com.PFA2.EduHousing.exceptions.EntityNotFoundException;
 import com.PFA2.EduHousing.exceptions.ErrorCodes;
 import com.PFA2.EduHousing.model.*;
-import com.PFA2.EduHousing.repository.ProfileImageRepository;
-import com.PFA2.EduHousing.repository.UserRepository;
+import com.PFA2.EduHousing.repository.jpa.ProfileImageRepository;
+import com.PFA2.EduHousing.repository.jpa.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

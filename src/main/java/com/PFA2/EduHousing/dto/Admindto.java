@@ -2,6 +2,7 @@ package com.PFA2.EduHousing.dto;
 
 import com.PFA2.EduHousing.Utils.ImageUtils;
 import com.PFA2.EduHousing.model.Admin;
+import com.PFA2.EduHousing.model.ConnexionStatus;
 import com.PFA2.EduHousing.model.Roles;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
@@ -30,6 +31,8 @@ public class Admindto  {
 
     private Boolean isEnabled;
 
+    private ConnexionStatus status;
+
     private ProfileImagedto profileImage;
 
     public static Admindto fromEntity(Admin admin){
@@ -46,6 +49,7 @@ public class Admindto  {
                 .role(admin.getRole())
                 .isActivated(admin.getIsActivated())
                 .isEnabled(admin.getIsEnabled())
+                .status(admin.getStatus())
                 .profileImage(
                         admin.getProfileImage()!=null?
                         ProfileImagedto.builder()
@@ -74,6 +78,7 @@ public class Admindto  {
         admin.setRole(admindto.getRole());
         admin.setIsEnabled(admindto.getIsEnabled());
         admin.setProfileImage(ProfileImagedto.toEntity(admindto.getProfileImage()));
+        admin.setStatus(admindto.getStatus());
 
         return admin;
     }

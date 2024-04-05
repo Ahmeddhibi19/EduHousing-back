@@ -5,10 +5,13 @@ import com.PFA2.EduHousing.exceptions.EntityNotFoundException;
 import com.PFA2.EduHousing.exceptions.ErrorCodes;
 import com.PFA2.EduHousing.exceptions.InvalidEntityException;
 import com.PFA2.EduHousing.model.College;
+import com.PFA2.EduHousing.model.ConnexionStatus;
 import com.PFA2.EduHousing.model.Roles;
 import com.PFA2.EduHousing.model.Student;
-import com.PFA2.EduHousing.repository.CollegeRepository;
-import com.PFA2.EduHousing.repository.StudentRepository;
+import com.PFA2.EduHousing.model.chat.MongoUser;
+import com.PFA2.EduHousing.repository.jpa.CollegeRepository;
+import com.PFA2.EduHousing.repository.mongo.MonGoUserRepository;
+import com.PFA2.EduHousing.repository.jpa.StudentRepository;
 import com.PFA2.EduHousing.validator.StudentValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,12 +29,14 @@ public class StudentServiceImpl implements StudentService {
     private final CollegeRepository collegeRepository;
     private final StudentRepository studentRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MonGoUserRepository monGoUserRepository;
 
     @Autowired
-    public StudentServiceImpl(StudentRepository studentRepository , CollegeRepository collegeRepository,PasswordEncoder passwordEncoder){
+    public StudentServiceImpl(StudentRepository studentRepository , CollegeRepository collegeRepository,PasswordEncoder passwordEncoder,MonGoUserRepository monGoUserRepository){
         this.studentRepository=studentRepository;
         this.collegeRepository=collegeRepository;
         this.passwordEncoder=passwordEncoder;
+        this.monGoUserRepository=monGoUserRepository;
     }
     @Override
     public Studentdto save(Studentdto studentdto,Integer collegeId) {
@@ -62,8 +66,15 @@ public class StudentServiceImpl implements StudentService {
         }
         studentdto.setRole(Roles.STUDENT);
         studentdto.setPassword(passwordEncoder.encode(studentdto.getPassword()));
+        studentdto.setStatus(ConnexionStatus.ONLINE);
         Student newStudent=Studentdto.toEntity(studentdto);
         newStudent.setCollege(college);
+        MongoUser mongoUser=MongoUser.builder()
+                //.id(newStudent.getId().toString())
+                .fullName(newStudent.getFirstName()+" "+newStudent.getLastName())
+                .status(newStudent.getStatus())
+                .build();
+        monGoUserRepository.save(mongoUser);
         return Studentdto.fromEntity(studentRepository.save(newStudent));
     }
 

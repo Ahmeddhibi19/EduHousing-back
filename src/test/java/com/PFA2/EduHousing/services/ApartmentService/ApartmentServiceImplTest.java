@@ -3,39 +3,20 @@ package com.PFA2.EduHousing.services.ApartmentService;
 import com.PFA2.EduHousing.dto.Apartmentdto;
 import com.PFA2.EduHousing.dto.Citydto;
 import com.PFA2.EduHousing.dto.Homeownerdto;
-import com.PFA2.EduHousing.model.Apartment;
 import com.PFA2.EduHousing.model.City;
 import com.PFA2.EduHousing.model.Homeowner;
-import com.PFA2.EduHousing.repository.*;
-import org.junit.jupiter.api.BeforeEach;
+import com.PFA2.EduHousing.repository.jpa.*;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.util.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
 
-import static org.junit.jupiter.api.Assertions.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 class ApartmentServiceImplTest {

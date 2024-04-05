@@ -1,21 +1,15 @@
 package com.PFA2.EduHousing.services.ApartmentImageService;
 import static org.mockito.Mockito.*;
 
-import com.PFA2.EduHousing.Utils.ImageUtils;
 import com.PFA2.EduHousing.model.Apartment;
 import com.PFA2.EduHousing.model.ApartmentImage;
-import com.PFA2.EduHousing.repository.ApartmentImageRepository;
-import com.PFA2.EduHousing.repository.ApartmentRepository;
+import com.PFA2.EduHousing.repository.jpa.ApartmentImageRepository;
+import com.PFA2.EduHousing.repository.jpa.ApartmentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.configuration.IMockitoConfiguration;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 

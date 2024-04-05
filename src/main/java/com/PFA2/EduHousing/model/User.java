@@ -1,11 +1,14 @@
 package com.PFA2.EduHousing.model;
 
+import com.PFA2.EduHousing.model.chat.ChatRoom;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 
 @Data
 @Builder
@@ -50,6 +53,16 @@ public class User extends AbstractEntity implements UserDetails {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private ConfirmationToken confirmationToken;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private ConnexionStatus status;
+
+    /*@OneToMany(mappedBy = "sender")
+    private List<ChatRoom> sentChatRooms;
+
+    @OneToMany(mappedBy = "recipient")
+    private List<ChatRoom> receivedChatRooms;*/
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

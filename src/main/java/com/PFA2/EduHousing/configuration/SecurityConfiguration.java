@@ -56,6 +56,7 @@ public class SecurityConfiguration  {
             "/api"+APP_ROOT+"/admin/create/**",
             "/api"+APP_ROOT+"/homeowner/create/**",
             "/api"+APP_ROOT+"/student/create/**",
+            "/api"+APP_ROOT+"/college/findAll",
             "/v2/api-docs",
             "/swagger-resources",
             "/swagger-resources/**",

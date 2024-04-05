@@ -1,4 +1,4 @@
-package com.PFA2.EduHousing.repository;
+package com.PFA2.EduHousing.repository.jpa;
 
 import com.PFA2.EduHousing.model.Apartment;
 import com.PFA2.EduHousing.model.College;

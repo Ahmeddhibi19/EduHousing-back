@@ -5,7 +5,7 @@ import com.PFA2.EduHousing.exceptions.EntityNotFoundException;
 import com.PFA2.EduHousing.exceptions.ErrorCodes;
 import com.PFA2.EduHousing.exceptions.InvalidEntityException;
 import com.PFA2.EduHousing.model.City;
-import com.PFA2.EduHousing.repository.CityRepository;
+import com.PFA2.EduHousing.repository.jpa.CityRepository;
 import com.PFA2.EduHousing.validator.CityValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

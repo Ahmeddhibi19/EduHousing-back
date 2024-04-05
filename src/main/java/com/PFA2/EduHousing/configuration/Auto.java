@@ -1,7 +1,7 @@
 package com.PFA2.EduHousing.configuration;
 
 import com.PFA2.EduHousing.model.*;
-import com.PFA2.EduHousing.repository.*;
+import com.PFA2.EduHousing.repository.jpa.*;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +9,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;

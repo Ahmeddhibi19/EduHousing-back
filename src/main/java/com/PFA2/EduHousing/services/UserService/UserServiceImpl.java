@@ -3,7 +3,7 @@ package com.PFA2.EduHousing.services.UserService;
 import com.PFA2.EduHousing.exceptions.EntityNotFoundException;
 import com.PFA2.EduHousing.exceptions.ErrorCodes;
 import com.PFA2.EduHousing.model.User;
-import com.PFA2.EduHousing.repository.UserRepository;
+import com.PFA2.EduHousing.repository.jpa.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -36,4 +36,7 @@ public class UserServiceImpl implements UserService{
         );
         return user;
     }
+
+
+
 }

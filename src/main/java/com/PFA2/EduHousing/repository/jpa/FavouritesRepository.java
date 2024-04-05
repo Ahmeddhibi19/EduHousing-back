@@ -1,4 +1,4 @@
-package com.PFA2.EduHousing.repository;
+package com.PFA2.EduHousing.repository.jpa;
 
 import com.PFA2.EduHousing.model.Favourites;
 import org.springframework.data.jpa.repository.JpaRepository;

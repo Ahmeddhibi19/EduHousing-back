@@ -4,6 +4,14 @@ spring:
     username: root
     password: admin
     driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    mongodb:
+      username: ahmeddhibi
+      password: azerty456
+      host: localhost
+      port: 27017
+      database: Eduhousing_chat_app25
+      uri: mongodb://localhost:27017/Eduhousing_chat_app2
   ## Specify DBMS
   jpa:
     database: MYSQL

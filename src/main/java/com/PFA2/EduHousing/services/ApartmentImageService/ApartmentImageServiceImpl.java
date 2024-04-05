@@ -1,14 +1,12 @@
 package com.PFA2.EduHousing.services.ApartmentImageService;
 
 import com.PFA2.EduHousing.Utils.ImageUtils;
-import com.PFA2.EduHousing.dto.ApartmentImagedto;
 import com.PFA2.EduHousing.exceptions.EntityNotFoundException;
 import com.PFA2.EduHousing.exceptions.ErrorCodes;
-import com.PFA2.EduHousing.exceptions.InvalidEntityException;
 import com.PFA2.EduHousing.model.Apartment;
 import com.PFA2.EduHousing.model.ApartmentImage;
-import com.PFA2.EduHousing.repository.ApartmentImageRepository;
-import com.PFA2.EduHousing.repository.ApartmentRepository;
+import com.PFA2.EduHousing.repository.jpa.ApartmentImageRepository;
+import com.PFA2.EduHousing.repository.jpa.ApartmentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +16,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j

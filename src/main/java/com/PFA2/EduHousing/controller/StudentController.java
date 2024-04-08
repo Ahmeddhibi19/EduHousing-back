@@ -100,7 +100,8 @@ public class StudentController implements StudentApi {
         /*List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority (student.getRole().toString()));*/
         ExtendedUser user = new ExtendedUser(student.get().getEmail(), student.get().getPassword(), student.get().getAuthorities());
-        return jwtUtils.generateToken(user);
+        String accessToken=jwtUtils.generateToken(user);
+        return "please click on this link  : <a href=\"http://localhost:3000/getStarted/"+accessToken+"\">click here</a>" + accessToken;
     }
 
     @Override

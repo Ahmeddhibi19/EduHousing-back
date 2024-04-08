@@ -43,7 +43,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService{
                                 user:null
                 )
                 .token(UUID.randomUUID().toString())
-                .expiryDate(Instant.now().plusMillis(1000 * 60 * 60 * 10))
+                .expiryDate(Instant.now().plusMillis(1000 * 60 * 60 * 24*14))
                 .build();
 
         return refreshTokenRepository.save(refreshToken);

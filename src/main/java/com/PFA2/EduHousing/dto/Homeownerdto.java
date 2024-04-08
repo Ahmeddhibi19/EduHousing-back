@@ -98,6 +98,7 @@ public class Homeownerdto  {
         homeowner.setPassword(homeownerdto.getPassword());
         homeowner.setPhoneNumber(homeownerdto.getPhoneNumber());
         homeowner.setRole(homeownerdto.getRole());
+        homeowner.setAddress(homeownerdto.getAddress());
         homeowner.setIsEnabled(homeownerdto.getIsEnabled());
         homeowner.setStatus(homeownerdto.getStatus());
         homeowner.setProfileImage(

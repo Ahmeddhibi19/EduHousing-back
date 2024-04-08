@@ -62,7 +62,7 @@ public class JwtUtils {
         return Jwts.builder().setClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24*7))
                 .claim("role",userDetails.getAuthorities())
                 .claim("id", userId)
                 .signWith(SignatureAlgorithm.HS256, key).compact();

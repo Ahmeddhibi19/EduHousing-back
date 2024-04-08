@@ -32,9 +32,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import javax.servlet.Filter;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 import java.util.Collections;
 
 import static com.PFA2.EduHousing.Utils.Constants.APP_ROOT;
@@ -115,6 +119,7 @@ public class SecurityConfiguration  {
        // httpSecurity.cors().and().csrf().disable();
         //@formatter:off
         httpSecurity
+                .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         req->
@@ -166,6 +171,18 @@ public class SecurityConfiguration  {
                 .addFilterBefore( applicationRequestFilter,  UsernamePasswordAuthenticationFilter.class);
         //@formatter:on
         return httpSecurity.build();
+    }
+
+    @Bean
+    public CorsFilter corsFilter(){
+       final UrlBasedCorsConfigurationSource source=new UrlBasedCorsConfigurationSource();
+       final CorsConfiguration corsConfiguration=new CorsConfiguration();
+       corsConfiguration.setAllowCredentials(true);
+       corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000",""));
+       corsConfiguration.setAllowedHeaders(Arrays.asList("Origin","Content-type","Accept","Authorization"));
+       corsConfiguration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","PATCH","OPTIONS"));
+       source.registerCorsConfiguration("/**",corsConfiguration);
+       return new CorsFilter(source);
     }
 
 

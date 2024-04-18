@@ -36,7 +36,7 @@ node(){
         print branchName
 
         stage('Env - clone generator'){
-            git "http://gitlab.example.com/pipeline/eduhousingapp.git"
+            git "http://gitlab.example.com/pipeline/generator.git"
         }
 
         stage('Env - run mysql'){

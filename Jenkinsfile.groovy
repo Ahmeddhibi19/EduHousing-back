@@ -1,9 +1,9 @@
 pipeline {
     agent any
 
-    environment {
-        project_token = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEF'
-    }
+//    environment {
+//        project_token = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEF'
+//    }
 
     triggers {
         gitlab(

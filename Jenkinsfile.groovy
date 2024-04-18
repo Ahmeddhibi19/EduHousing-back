@@ -34,7 +34,9 @@ node(){
         print buildNum
         print branchName
         stage('Env - clone generator'){
-            git "http://gitlab.example.com/pipeline/generator.git"
+            steps {
+                git branch: 'master', url: 'http://gitlab.example.com/pipeline/generator.git'
+            }
         }
         stage('Env - run mysql'){
             sh "./generator.sh -m"

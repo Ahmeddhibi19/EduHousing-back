@@ -37,6 +37,8 @@ public class UserServiceImpl implements UserService{
         return user;
     }
 
-
-
+    @Override
+    public Integer getTotalUsers() {
+        return userRepository.findAll().size();
+    }
 }

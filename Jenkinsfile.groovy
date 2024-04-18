@@ -1,58 +1,61 @@
-pipeline {
-    agent any
+def project_token = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEF'
 
-//    environment {
-//        project_token = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEF'
-//    }
+properties([
+        gitLabConnection('your-gitlab-connection-name'),
+        pipelineTriggers([
+                [
+                        $class: 'GitLabPushTrigger',
+                        branchFilterType: 'All',
+                        triggerOnPush: true,
+                        triggerOnMergeRequest: true,
+                        triggerOpenMergeRequestOnPush: "never",
+                        triggerOnNoteRequest: true,
+                        noteRegex: "Jenkins please retry a build",
+                        skipWorkInProgressMergeRequest: true,
+                        secretToken: project_token,
+                        ciSkip: false,
+                        setBuildDescription: true,
+                        addNoteOnMergeRequest: true,
+                        addCiMessage: true,
+                        addVoteOnMergeRequest: true,
+                        acceptMergeRequestOnSuccess: true,
+                        branchFilterType: "NameBasedFilter",
+                        includeBranchesSpec: "",
+                        excludeBranchesSpec: "",
+                ]
+        ])
+])
 
-    triggers {
-        gitlab(
-                triggerOnPush: true,
-                triggerOnMergeRequest: true,
-                triggerOpenMergeRequestOnPush: 'never',
-                triggerOnNoteRequest: true,
-                noteRegex: 'Jenkins please retry a build',
-                skipWorkInProgressMergeRequest: true,
-                secretToken: project_token,
-                ciSkip: false,
-                setBuildDescription: true,
-                addNoteOnMergeRequest: true,
-                addCiMessage: true,
-                addVoteOnMergeRequest: true,
-                acceptMergeRequestOnSuccess: true,
-                branchFilterType: 'All',
-                includeBranchesSpec: '',
-                excludeBranchesSpec: ''
-        )
-    }
 
-    stages {
-        stage('Clone Generator Repository') {
-            steps {
-                git branch: 'master', url: 'http://gitlab.example.com/pipeline/generator.git'
-            }
+node(){
+    try{
+        def buildNum = env.BUILD_NUMBER
+        def branchName= env.BRANCH_NAME
+
+        print buildNum
+        print branchName
+
+        stage('Env - clone generator'){
+            git "http://gitlab.example.com/pipeline/eduhousingapp.git"
         }
 
-        stage('Run MySQL') {
-            steps {
-                sh './generator.sh -m'
-                sh 'docker ps -a'
-            }
+        stage('Env - run mysql'){
+            sh "chmod +x generator.sh"
+            sh "./generator.sh -m"
+            sh "docker ps -a"
+
+        }
+        stage('Env - run mongo'){
+            sh "chmod +x generator.sh"
+            sh "./generator.sh -mn"
+            sh "docker ps -a"
+
         }
 
-        stage('Run MongoDB') {
-            steps {
-                sh './generator.sh -mn'
-                sh 'docker ps -a'
-            }
-        }
-    }
-
-    post {
-        always {
-            sh 'docker rm -f mysql'
-            sh 'docker rm -f mongo'
-            cleanWs()
-        }
+    } finally {
+        sh 'docker rm -f mysql'
+        sh 'docker rm -f mongo'
+        cleanWs()
     }
 }
+

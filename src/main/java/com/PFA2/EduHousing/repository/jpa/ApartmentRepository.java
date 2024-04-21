@@ -3,6 +3,7 @@ package com.PFA2.EduHousing.repository.jpa;
 import com.PFA2.EduHousing.model.Apartment;
 import com.PFA2.EduHousing.model.City;
 import com.PFA2.EduHousing.model.Homeowner;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -44,7 +45,8 @@ public interface ApartmentRepository extends JpaRepository<Apartment,Integer> {
 
     @Query("SELECT d.apartment FROM Distance d WHERE d.college.id = :collegeId AND d.college.city.id = d.apartment.city.id AND d.distanceValue < :distanceValue")
     public List<Apartment> findApartmentsByCollegeAndCityAndDistanceLessThan(Integer collegeId, BigDecimal distanceValue);
-
+    @Transactional
+    public void deleteById(Integer id);
    /* @Query("select * from apartment ap where")
     public List<Apartment> findBydistance()*/
 }

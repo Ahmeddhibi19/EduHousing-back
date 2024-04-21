@@ -7,5 +7,6 @@ public interface UserService {
     public Integer getUserId(UserDetails userDetails);
     public User findUserByEmail(String email);
     public Integer getTotalUsers();
+    public String deleteUserById(Integer id);
 
 }

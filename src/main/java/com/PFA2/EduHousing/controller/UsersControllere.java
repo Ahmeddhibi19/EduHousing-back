@@ -18,4 +18,9 @@ public class UsersControllere implements UserApi {
     public Integer totalUser() {
         return userService.getTotalUsers();
     }
+
+    @Override
+    public String deleteById(Integer id) {
+        return userService.deleteUserById(id);
+    }
 }

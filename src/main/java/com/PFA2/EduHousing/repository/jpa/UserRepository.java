@@ -2,6 +2,7 @@ package com.PFA2.EduHousing.repository.jpa;
 
 import com.PFA2.EduHousing.model.ConnexionStatus;
 import com.PFA2.EduHousing.model.User;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -21,6 +22,9 @@ public interface UserRepository extends JpaRepository<User,Integer> {
     public List<User> findAllByFirstName(String firstName);
 
     public void deleteUserByEmail(String email);
+
+    @Transactional
+    public void deleteUserById(Integer id);
 
     public void deleteUserByPhoneNumber(String phoneNumber);
 

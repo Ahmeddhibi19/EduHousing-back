@@ -2,7 +2,10 @@ package com.PFA2.EduHousing.validator;
 
 import com.PFA2.EduHousing.dto.RentalDetailsdto;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class RentalDetailsValidator {
@@ -20,6 +23,12 @@ public class RentalDetailsValidator {
             }
             if(rentalDetails.getStartDate()==null){
                 errors.add("require start date");
+            }  else {
+                LocalDate today = LocalDate.now();
+                LocalDate startDate = rentalDetails.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                if (startDate.isBefore(today)) {
+                    errors.add("Start date must be after today");
+                }
             }
             if(rentalDetails.getEndDate()==null){
                 errors.add("require end date");

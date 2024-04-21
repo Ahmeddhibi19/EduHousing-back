@@ -6,6 +6,8 @@ import com.PFA2.EduHousing.exceptions.ErrorCodes;
 import com.PFA2.EduHousing.exceptions.InvalidEntityException;
 import com.PFA2.EduHousing.model.Apartment;
 import com.PFA2.EduHousing.model.RentalDetails;
+import com.PFA2.EduHousing.model.Request;
+import com.PFA2.EduHousing.model.Status;
 import com.PFA2.EduHousing.repository.jpa.ApartmentRepository;
 import com.PFA2.EduHousing.repository.jpa.RentalDetailsRepository;
 import com.PFA2.EduHousing.validator.RentalDetailsValidator;
@@ -13,10 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,6 +44,7 @@ public class RentalDetailsServiceImpl implements RentalDetailsService{
         if(!errors.isEmpty()){
             log.error("rental details is not valid {}",rentalDetailsdto);
             throw new InvalidEntityException("rental details is not valid ", ErrorCodes.RENTAL_DETAILS_NOT_VALID, errors);
+
         }
 
         RentalDetails newRentalDetails = RentalDetailsdto.toEntity(rentalDetailsdto);
@@ -82,12 +84,12 @@ public class RentalDetailsServiceImpl implements RentalDetailsService{
                 }
                 if (rentalDetails.getIsCurrent()) {
                     throw new InvalidEntityException("There is already a current rental period for this apartment",
-                            ErrorCodes.CUURENT_RENTAL_ALL_READY_EXISTS);
+                            ErrorCodes.CURRENT_RENTAL_ALL_READY_EXISTS);
                 }
 
             }
         }
-        rentalDetailsList.forEach(rd -> rd.setIsCurrent(false));
+
         newRentalDetails.setIsCurrent(true);
         newRentalDetails.setApartment(apartment);
         apartment.getRentalDetailsList().add(newRentalDetails);
@@ -200,10 +202,54 @@ public class RentalDetailsServiceImpl implements RentalDetailsService{
                 ()->new EntityNotFoundException("no rental details with this id :"+rentalDetailsdto.getId(),
                         ErrorCodes.RENTAL_DETAILS_NOT_FOUND)
         );
+        Set<Request> requestList = rentalDetails.getRequestSet();
+        for (Request request:requestList){
+            if (request.getStatus()== Status.VALIDATED){
+                throw new InvalidEntityException("cannot update rental post with validated request",ErrorCodes.CANNOT_UPDATE_RENTAL_POST_WITH_VALIDATED_REQUESTS);
+            }
+        }
         rentalDetails.setMonthlyAmount(rentalDetailsdto.getMonthlyAmount() != null ?
                 rentalDetailsdto.getMonthlyAmount() : rentalDetails.getMonthlyAmount());
         rentalDetails.setDescription(rentalDetailsdto.getDescription()!=null?
                 rentalDetailsdto.getDescription():rentalDetails.getDescription());
+        if (rentalDetailsdto.getStartDate()!=null){
+            LocalDate today = LocalDate.now();
+            LocalDate newStartDate = rentalDetailsdto.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            if (newStartDate.isBefore(today)) {
+                throw new InvalidEntityException("new Start date must be after today");
+            }
+            if(rentalDetailsdto.getEndDate()==null){
+                if (rentalDetailsdto.getStartDate().before(rentalDetails.getEndDate())){
+                    rentalDetails.setStartDate(rentalDetailsdto.getStartDate());
+                }else {
+                    throw new InvalidEntityException("new start date must be before old end date");
+                }
+            }else {
+                if (rentalDetailsdto.getStartDate().before(rentalDetailsdto.getEndDate())){
+                    rentalDetails.setStartDate(rentalDetailsdto.getStartDate());
+                    rentalDetails.setEndDate(rentalDetailsdto.getEndDate());
+                }else {
+                    throw new InvalidEntityException("new start date must be before new end date");
+                }
+            }
+        }
+        if (rentalDetailsdto.getEndDate()!=null){
+            if (rentalDetailsdto.getStartDate()==null){
+                if (rentalDetailsdto.getEndDate().after(rentalDetails.getStartDate())){
+                    rentalDetails.setEndDate(rentalDetailsdto.getEndDate());
+                }else {
+                    throw new InvalidEntityException("new end date must be after old start date");
+                }
+            }
+            else {
+                if (rentalDetailsdto.getStartDate().before(rentalDetailsdto.getEndDate())){
+                    rentalDetails.setStartDate(rentalDetailsdto.getStartDate());
+                    rentalDetails.setEndDate(rentalDetailsdto.getEndDate());
+                }else {
+                    throw new InvalidEntityException("new start date must be before new end date");
+                }
+            }
+        }
 
         return RentalDetailsdto.fromEntity(rentalDetailsRepository.save(rentalDetails));
     }
@@ -211,8 +257,18 @@ public class RentalDetailsServiceImpl implements RentalDetailsService{
     @Override
     public void deleteById(Integer id) {
         if (id==null){
-            log.error("rental details is is null");
+            log.error("rental details id is null");
             return;
+        }
+        RentalDetails rentalDetails=rentalDetailsRepository.findById(id).orElseThrow(
+                ()->new EntityNotFoundException("no rental details with this id :"+id,
+                        ErrorCodes.RENTAL_DETAILS_NOT_FOUND)
+        );
+        Set<Request> requestList = rentalDetails.getRequestSet();
+        for (Request request:requestList){
+            if (request.getStatus()== Status.VALIDATED){
+                throw new InvalidEntityException("cannot delete rental post with validated request",ErrorCodes.CANNOT_DELETE_RENTAL_POST_WITH_VALIDATED_REQUESTS);
+            }
         }
         rentalDetailsRepository.deleteById(id);
     }

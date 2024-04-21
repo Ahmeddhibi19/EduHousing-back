@@ -207,6 +207,7 @@ public class ApartmentServiceImpl implements ApartmentService{
     }
 
     @Override
+    @Transactional
     public void  deleteById(Integer id) {
         if(id==null){
             log.error("apartment id is null");

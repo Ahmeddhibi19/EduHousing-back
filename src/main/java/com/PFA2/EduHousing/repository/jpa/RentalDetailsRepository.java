@@ -27,7 +27,7 @@ public interface RentalDetailsRepository extends JpaRepository<RentalDetails,Int
     @Query("select r from  RentalDetails r where r.startDate>=:startDate and r.endDate<=:endDate")
     public List<RentalDetails> getRentalDetailsByPeriod(Date startDate,Date endDate);
 
-    @Query("select r from RentalDetails r where r.apartment.city.id=:studentCollegeCityId and r.isCurrent=true")
+    @Query("select r from RentalDetails r where r.apartment.city.id=:studentCollegeCityId and r.isCurrent=true and r.apartment.isRented=false ")
     public List<RentalDetails> getRentalDetailsByStudentCollegeCity(Integer studentCollegeCityId);
 
     @Query("SELECT rd FROM RentalDetails rd JOIN rd.requestSet r WHERE r.status = 'VALIDATED' and r.student.id=:studentId")

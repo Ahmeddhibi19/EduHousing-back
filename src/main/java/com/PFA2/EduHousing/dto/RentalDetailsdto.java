@@ -75,6 +75,11 @@ public class RentalDetailsdto {
                                                 .phoneNumber(rentalDetails.getApartment().getHomeowner().getPhoneNumber())
                                         .build()
                                 )
+                                .citydto(
+                                        Citydto.builder()
+                                                .name(rentalDetails.getApartment().getCity().getName())
+                                                .build()
+                                )
                                 .build()
                 )
 

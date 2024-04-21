@@ -15,10 +15,10 @@ import java.util.List;
 @Entity
 @Table(name = "college")
 public class College extends AbstractEntity{
-    @Column(name = "latitude")
+    @Column(name = "latitude", precision = 20, scale = 15)
     private BigDecimal latitude;
 
-    @Column(name = "longitude")
+    @Column(name = "longitude", precision = 20, scale = 15)
     private BigDecimal longitude;
 
     @Column(name = "address")

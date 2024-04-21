@@ -4,11 +4,14 @@ import com.PFA2.EduHousing.exceptions.EntityNotFoundException;
 import com.PFA2.EduHousing.exceptions.ErrorCodes;
 import com.PFA2.EduHousing.model.User;
 import com.PFA2.EduHousing.repository.jpa.UserRepository;
+import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     @Autowired
@@ -40,5 +43,16 @@ public class UserServiceImpl implements UserService{
     @Override
     public Integer getTotalUsers() {
         return userRepository.findAll().size();
+    }
+
+    @Override
+    @Transactional
+    public String deleteUserById(Integer id) {
+        if(id==null){
+            log.error("user id is null !!");
+            return "id is null";
+        }
+        userRepository.deleteUserById(id);
+        return "user deleted successfully";
     }
 }

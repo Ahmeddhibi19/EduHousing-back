@@ -75,6 +75,7 @@ public class Apartmentdto {
                         Homeownerdto.builder()
                                 .id(apartment.getHomeowner().getId())
                                 .address(apartment.getHomeowner().getAddress())
+                                .email(apartment.getHomeowner().getEmail())
                                 .firstName(apartment.getHomeowner().getFirstName())
                                 .lastName(apartment.getHomeowner().getLastName())
                                 .profileImage(ProfileImagedto.fromEntity(apartment.getHomeowner().getProfileImage()))
@@ -94,12 +95,12 @@ public class Apartmentdto {
                                 .postalCode(apartment.getCity().getPostalCode())
                                 .build()
                 )
-                /*.images(
+                .images(
                         apartment.getImageList()!=null ?
                                 apartment.getImageList().stream()
                                         .map(ApartmentImagedto::fromEntity)
                                         .collect(Collectors.toList()) : null
-                )*/
+                )
                 .favourites(
                         apartment.getFavouritesSet()!=null?
                                 apartment.getFavouritesSet().stream()

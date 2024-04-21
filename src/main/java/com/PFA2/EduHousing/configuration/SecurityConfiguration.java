@@ -145,7 +145,7 @@ public class SecurityConfiguration  {
                                     .requestMatchers("/api"+APP_ROOT+"/homeowner/homeowner/**").hasAnyRole(HOMEOWNER.name())
                                     .requestMatchers("/api"+APP_ROOT+"/profileImage/admin/**").hasAnyRole(ADMIN.name())
                                     .requestMatchers("/api"+APP_ROOT+"/rentalDetails/homeowner/**").hasAnyRole(HOMEOWNER.name())
-                                    .requestMatchers("/api"+APP_ROOT+"/rentalDetails/homeowner_admin/**").hasAnyAuthority(ADMIN_READ.name(),HOMEOWNER_READ.name())
+                                    .requestMatchers("/api"+APP_ROOT+"/rentalDetails/homeowner_admin/**").hasAnyRole(HOMEOWNER.name(),ADMIN.name())
                                     .requestMatchers("/api"+APP_ROOT+"/rentalDetails/student/**").hasAnyAuthority(STUDENT_READ.name(),ADMIN_READ.name())
                                     .requestMatchers("/api"+APP_ROOT+"/rentalfeedback/student/**").hasAnyRole(STUDENT.name())
                                     .requestMatchers("/api"+APP_ROOT+"/rentalfeedback/admin/**").hasAnyRole(ADMIN.name())
@@ -156,6 +156,7 @@ public class SecurityConfiguration  {
                                     .requestMatchers("/api"+APP_ROOT+"/request/homeowner/**").hasAnyRole(HOMEOWNER.name())
                                     .requestMatchers("/api"+APP_ROOT+"/student/student/**").hasAnyRole(STUDENT.name())
                                     .requestMatchers("/api"+APP_ROOT+"/student/admin/**").hasAnyRole(ADMIN.name())
+                                    .requestMatchers("/api"+APP_ROOT+"/user/admin/delete_by_id/**").hasAnyRole(ADMIN.name())
                         .anyRequest().authenticated()
                 )
 

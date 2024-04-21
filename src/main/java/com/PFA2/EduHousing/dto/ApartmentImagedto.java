@@ -30,16 +30,16 @@ public class ApartmentImagedto {
         }
         return ApartmentImagedto.builder()
                 .id(apartmentImage.getId())
-                .data(apartmentImage.getData())
+                .data( ImageUtils.decompressImage(apartmentImage.getData()))
                 .name(apartmentImage.getName())
                 .type(apartmentImage.getType())
-                .apartment(
+                /*.apartment(
                         Apartmentdto.builder()
                                 .id(apartmentImage.getApartment().getId())
                                 .type(apartmentImage.getApartment().getType())
                                 .address(apartmentImage.getApartment().getAddress())
                                 .build()
-                )
+                )*/
                 .build();
     }
 

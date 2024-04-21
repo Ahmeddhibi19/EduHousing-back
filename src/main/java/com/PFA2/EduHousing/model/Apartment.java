@@ -17,10 +17,10 @@ import java.util.Set;
 @Table(name = "apartment")
 public class Apartment extends AbstractEntity{
 
-    @Column(name = "latitude")
+    @Column(name = "latitude", precision = 20, scale = 15)
     private BigDecimal latitude;
 
-    @Column(name = "longitude")
+    @Column(name = "longitude", precision = 20, scale = 15)
     private BigDecimal longitude;
 
     @Column(name = "address")

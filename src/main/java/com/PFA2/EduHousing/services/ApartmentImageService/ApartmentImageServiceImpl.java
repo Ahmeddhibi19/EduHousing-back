@@ -7,6 +7,7 @@ import com.PFA2.EduHousing.model.Apartment;
 import com.PFA2.EduHousing.model.ApartmentImage;
 import com.PFA2.EduHousing.repository.jpa.ApartmentImageRepository;
 import com.PFA2.EduHousing.repository.jpa.ApartmentRepository;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -114,6 +115,7 @@ public class ApartmentImageServiceImpl implements ApartmentImageService {
     }
 
     @Override
+    @Transactional
     public void deleteById(Integer id) {
         if(id==null){
             log.error("deleting apartment image with null id ");

@@ -55,3 +55,7 @@ server:
         #include: openapi, swagger-ui
 
 
+
+
+#localhost:3306/eduhousing?createDatabaseIfNotExist=true&userSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT
+

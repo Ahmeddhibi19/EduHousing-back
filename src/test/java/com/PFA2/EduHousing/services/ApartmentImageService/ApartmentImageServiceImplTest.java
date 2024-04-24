@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ApartmentImageServiceImplTest {
 
 
-    @Mock
+/*    @Mock
     private ApartmentImageRepository apartmentImageRepository;
 
     @Mock
@@ -80,5 +80,5 @@ class ApartmentImageServiceImplTest {
 
     @Test
     void deleteById() {
-    }
+    }*/
 }

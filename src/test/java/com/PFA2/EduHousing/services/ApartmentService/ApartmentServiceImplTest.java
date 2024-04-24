@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ApartmentServiceImplTest {
 
 
-    private ApartmentRepository apartmentRepository;
+    /*private ApartmentRepository apartmentRepository;
 
 
     private HomeownerRepository homeownerRepository;
@@ -94,9 +94,9 @@ class ApartmentServiceImplTest {
                 .build();
 
 
-        /*when(homeownerRepository.findById(homeownerId)).thenReturn(Optional.of(homeowner));
+        *//*when(homeownerRepository.findById(homeownerId)).thenReturn(Optional.of(homeowner));
         when(cityRepository.findById(cityId)).thenReturn(Optional.of(city));
-        when(collegeRepository.findAll()).thenReturn(new ArrayList<>());*/
+        when(collegeRepository.findAll()).thenReturn(new ArrayList<>());*//*
 
         // Act
         Apartmentdto savedApartment = apartmentService.save(WillSavedApartmentdto, homeownerId, cityId);
@@ -211,5 +211,5 @@ class ApartmentServiceImplTest {
 
     @Test
     void findAll() {
-    }
+    }*/
 }

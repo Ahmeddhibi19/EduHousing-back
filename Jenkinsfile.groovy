@@ -100,7 +100,7 @@ node(){
 
         /* Docker - build & push */
         /* Attention Credentials */
-        def imageName='192.168.5.5:5000/EduHousing'
+        def imageName='192.168.5.5:5000/eduhousing'
 
         stage('DOCKER - Build/Push registry'){
             docker.withRegistry('http://192.168.5.5:5000', 'myregistry_login') {
@@ -113,7 +113,7 @@ node(){
         /* Docker - test */
         stage('DOCKER - check registry'){
             withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'myregistry_login',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-                sh 'curl -sk --user $USERNAME:$PASSWORD https://192.168.5.5:5000/v2/EduHousing/tags/list'
+                sh 'curl -sk --user $USERNAME:$PASSWORD https://192.168.5.5:5000/v2/eduhousing/tags/list'
             }
         }
 

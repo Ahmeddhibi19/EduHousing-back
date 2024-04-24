@@ -51,6 +51,43 @@ node(){
             sh "docker ps -a"
 
         }
+        /*get the app*/
+        stage('SERVICE - Git checkout'){
+            git branch: branchName, url:"http://gitlab.example.com/pipeline/app.git"
+        }
+        if(branchName =="dev"){
+            extension ="-SNAPSHOT"
+        }
+        if(branchName == "stage"){
+            extension = "-RC"
+        }
+        if(branchName == "master"){
+            extension = ""
+        }
+        /*Retrieving the long commitID*/
+        def commitIdLong = sh returnStdout: true, script: 'git rev-parse HEAD'
+
+        /*Retrieving the short commitID*/
+        def commitId = commitIdLong.take(7)
+
+        /*Changing the version in the pom.xml*/
+        sh "sed -i s/'-SNAPSHOT'/${extension}/g pom.xml"
+
+        /* Récupération de la version du pom.xml après modification */
+        def version = sh returnStdout: true, script: "cat pom.xml | grep -A1 '<artifactId>EduHousing' | tail -1 |perl -nle 'm{.*<version>(.*)</version>.*};print \$1' | tr -d '\n'"
+
+        print """
+         #################################################
+            BanchName: $branchName
+            CommitID: $commitId
+            AppVersion: $version
+            JobNumber: $buildNum
+         #################################################
+            """
+
+
+
+
 
     } finally {
         sh 'docker rm -f mysql'

@@ -60,6 +60,8 @@ public class HomeownerServiceImpl implements HomeownerService{
         MongoUser mongoUser=MongoUser.builder()
                // .id(homeownerdto.getId().toString())
                 .fullName(homeownerdto.getFirstName()+" "+homeownerdto.getLastName())
+                .email(homeownerdto.getEmail())
+                .roles(Roles.HOMEOWNER)
                 .status(homeownerdto.getStatus())
                 .build();
         monGoUserRepository.save(mongoUser);

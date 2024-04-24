@@ -22,12 +22,12 @@ public interface UserApi {
             @ApiResponse(responseCode = "404",description = "something went wrong!!!")
     })
     public Integer totalUser();
-    @DeleteMapping(value = APP_ROOT+"/user/admin/delete_by_id/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = APP_ROOT+"/user/admin/delete_by_id/{id}/{mongo_Id}",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "delete user by id... ",description = "needs an existing user id.."/*response = Void.class*/)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",description = "user deleted successfully"),
             @ApiResponse(responseCode = "400",description = "something went wrong !!!")
     })
-    public String deleteById(@PathVariable("id") Integer id);
+    public String deleteById(@PathVariable("id") Integer id,@PathVariable("mongo_Id")String mongoId);
 
 }

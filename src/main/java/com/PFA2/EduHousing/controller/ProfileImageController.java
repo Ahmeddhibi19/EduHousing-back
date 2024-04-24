@@ -39,4 +39,9 @@ public class ProfileImageController implements ProfileImageApi {
     public void deleteByUserId(Integer id) {
         profileImageService.deleteByUserId(id);
     }
+
+    @Override
+    public byte[] findByUserEmail(String email) {
+        return profileImageService.findByUserEmail(email);
+    }
 }

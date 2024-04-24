@@ -62,6 +62,7 @@ public class SecurityConfiguration  {
             "/api"+APP_ROOT+"/student/create/**",
             "/api"+APP_ROOT+"/college/findAll",
             "/api"+APP_ROOT+"/admin/total_number_user",
+            "/ws/**",
             "/v2/api-docs",
             "/swagger-resources",
             "/swagger-resources/**",
@@ -157,6 +158,14 @@ public class SecurityConfiguration  {
                                     .requestMatchers("/api"+APP_ROOT+"/student/student/**").hasAnyRole(STUDENT.name())
                                     .requestMatchers("/api"+APP_ROOT+"/student/admin/**").hasAnyRole(ADMIN.name())
                                     .requestMatchers("/api"+APP_ROOT+"/user/admin/delete_by_id/**").hasAnyRole(ADMIN.name())
+                                    .requestMatchers("/users").hasAnyRole(HOMEOWNER.name(),STUDENT.name(),ADMIN.name())
+                                    .requestMatchers("/chat").hasAnyRole(HOMEOWNER.name(),STUDENT.name())
+                                    .requestMatchers("/messages/**").hasAnyRole(HOMEOWNER.name(),STUDENT.name())
+                                    /*.requestMatchers("/ws/**").hasAnyRole(HOMEOWNER.name(),STUDENT.name())*/
+                                    .requestMatchers("/user/**").hasAnyRole(HOMEOWNER.name(),STUDENT.name())
+                                    .requestMatchers("/mongouser/**").hasAnyRole(HOMEOWNER.name(),STUDENT.name())
+                                    .requestMatchers("/messages/**").hasAnyRole(HOMEOWNER.name(),STUDENT.name())
+
                         .anyRequest().authenticated()
                 )
 

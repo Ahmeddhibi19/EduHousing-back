@@ -15,8 +15,8 @@ public class ChatRoomServiceImpl implements ChatRoomService{
 
     @Override
     public Optional<String> getChatRoomId(
-            Integer senderId,
-            Integer recipientId,
+            String senderId,
+            String recipientId,
             boolean createNewRoomIfNotExists
     ) {
         return chatRoomRepository
@@ -33,8 +33,8 @@ public class ChatRoomServiceImpl implements ChatRoomService{
     }
 
     @Override
-    public String createChatId(Integer senderId, Integer recipientId) {
-        var chatId = String.format("%s_%s", senderId.toString(), recipientId.toString());
+    public String createChatId(String senderId, String recipientId) {
+        var chatId = String.format("%s_%s", senderId, recipientId);
 
         ChatRoom senderRecipient = ChatRoom
                 .builder()

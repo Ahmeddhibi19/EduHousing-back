@@ -30,7 +30,7 @@ import static com.PFA2.EduHousing.Utils.Constants.APP_ROOT;
 public class AdminController implements AdminApi {
     private final AdminService adminService;
     private final JwtUtils jwtUtils;
-    private AdminRepository adminRepository;
+    private final AdminRepository adminRepository;
     private final EmailService emailService;
     private final ConfirmationTokenRepository confirmationTokenRepository;
 

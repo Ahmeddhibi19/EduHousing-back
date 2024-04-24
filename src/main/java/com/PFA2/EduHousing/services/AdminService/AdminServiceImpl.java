@@ -61,12 +61,13 @@ public class AdminServiceImpl implements AdminService {
         admindto.setRole(Roles.ADMIN);
         admindto.setPassword(passwordEncoder.encode(admindto.getPassword()));
         admindto.setStatus(ConnexionStatus.ONLINE);
-        MongoUser mongoUser=MongoUser.builder()
+       /* MongoUser mongoUser=MongoUser.builder()
                 //.id(admindto.getId().toString())
                 .fullName(admindto.getFirstName()+" "+admindto.getLastName())
+                .email(admindto.getEmail())
                 .status(admindto.getStatus())
                 .build();
-        monGoUserRepository.save(mongoUser);
+        monGoUserRepository.save(mongoUser);*/
         //monGoUserRepository.save(Admindto.toEntity(admindto));
         return Admindto.fromEntity(
                 adminRepository.save(

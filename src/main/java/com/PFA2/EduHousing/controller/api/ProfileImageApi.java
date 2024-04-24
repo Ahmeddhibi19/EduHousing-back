@@ -50,4 +50,11 @@ public interface ProfileImageApi {
             @ApiResponse(responseCode = "400",description = "something went wrong !!!")
     })
     public void deleteByUserId(@PathVariable("id") Integer id);
+    @GetMapping(value = APP_ROOT+"/profileImage/user_email/{userEmail}",produces = MediaType.IMAGE_PNG_VALUE)
+    @Operation(summary = "search one profile image", description = "search profile image with the specified user ID ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode  = "200",description = "profile image found"),
+            @ApiResponse(responseCode = "404",description = "profile image not found !!!")
+    })
+    public byte[] findByUserEmail(@PathVariable("userEmail") String email);
 }

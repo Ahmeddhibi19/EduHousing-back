@@ -9,6 +9,7 @@ import com.PFA2.EduHousing.repository.jpa.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -122,5 +123,19 @@ public class ProfileImageServiceImpl implements ProfileImageService{
             return ;
         }
         profileImageRepository.deleteProfileImageByUserId(userId);
+    }
+
+    @Override
+    public byte[] findByUserEmail(String email) {
+        if(!StringUtils.hasLength(email)){
+            log.error("user email is null");
+            return null;
+        }
+        Optional<ProfileImage> profileImage= profileImageRepository.findProfileImageByUserEmail(email);
+        if(profileImage.isEmpty()){
+            throw new EntityNotFoundException("no profile image with this user id :"+email,
+                    ErrorCodes.PROFILE_IMAGE_NOT_FOUND);
+        }
+        return ImageUtils.decompressImage(profileImage.get().getData());
     }
 }

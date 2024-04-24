@@ -20,7 +20,7 @@ public class UsersControllere implements UserApi {
     }
 
     @Override
-    public String deleteById(Integer id) {
-        return userService.deleteUserById(id);
+    public String deleteById(Integer id,String mongoId) {
+        return userService.deleteUserById(id,mongoId);
     }
 }

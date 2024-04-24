@@ -12,4 +12,5 @@ public interface ProfileImageService {
     public byte[] findByUserId(Integer userId);
     public void deleteById(Integer id);
     public void deleteByUserId(Integer userId);
+    public byte[] findByUserEmail(String email);
 }

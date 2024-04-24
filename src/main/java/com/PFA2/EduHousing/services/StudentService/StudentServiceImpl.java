@@ -72,7 +72,9 @@ public class StudentServiceImpl implements StudentService {
         MongoUser mongoUser=MongoUser.builder()
                 //.id(newStudent.getId().toString())
                 .fullName(newStudent.getFirstName()+" "+newStudent.getLastName())
+                .email(studentdto.getEmail())
                 .status(newStudent.getStatus())
+                .roles(Roles.STUDENT)
                 .build();
         monGoUserRepository.save(mongoUser);
         return Studentdto.fromEntity(studentRepository.save(newStudent));

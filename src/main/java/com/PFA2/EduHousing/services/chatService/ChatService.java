@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface ChatService {
     public Chat save(Chat chatMessage);
-    public List<Chat> findChatMessages(Integer senderId, Integer recipientId);
+    public List<Chat> findChatMessages(String senderId, String recipientId);
 }

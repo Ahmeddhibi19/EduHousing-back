@@ -4,9 +4,9 @@ import java.util.Optional;
 
 public interface ChatRoomService {
     public Optional<String> getChatRoomId(
-            Integer senderId,
-            Integer recipientId,
+            String senderId,
+            String recipientId,
             boolean createNewRoomIfNotExists
     );
-    public String createChatId(Integer senderId, Integer recipientId);
+    public String createChatId(String senderId, String recipientId);
 }

@@ -1,6 +1,7 @@
 package com.PFA2.EduHousing.model.chat;
 
 import com.PFA2.EduHousing.model.ConnexionStatus;
+import com.PFA2.EduHousing.model.Roles;
 import com.PFA2.EduHousing.model.Status;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,5 +18,7 @@ public class MongoUser {
     @Id
     private String id;
     private String fullName;
+    private String email;
+    private Roles roles;
     private ConnexionStatus status;
 }

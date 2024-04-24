@@ -33,7 +33,7 @@ public class ChatServiceImpl implements ChatService{
     }
 
     @Override
-    public List<Chat> findChatMessages(Integer senderId, Integer recipientId) {
+    public List<Chat> findChatMessages(String senderId, String recipientId) {
         var chatId = chatRoomService.getChatRoomId(senderId, recipientId, false);
         return chatId.map(repository::findByChatId).orElse(new ArrayList<>());
     }

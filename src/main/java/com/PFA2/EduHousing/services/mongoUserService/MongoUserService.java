@@ -8,4 +8,5 @@ import java.util.List;
 public interface MongoUserService {
     public void disconnect(User user);
     public List<MongoUser> findConnectedUsers();
+    public String findUserIdByEmail(String email);
 }

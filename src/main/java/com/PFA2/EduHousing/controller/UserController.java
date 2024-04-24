@@ -12,10 +12,12 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Controller
+@RestController
 public class UserController {
 
     private MongoUserService mongoUserService;
@@ -33,5 +35,9 @@ public class UserController {
     @GetMapping("/users")
     public ResponseEntity<List<MongoUser>> findConnectedUsers(){
         return ResponseEntity.ok(mongoUserService.findConnectedUsers());
+    }
+    @GetMapping("/mongouser/{email}")
+    public ResponseEntity<String> findUserId(@PathVariable("email") String email){
+        return ResponseEntity.ok(mongoUserService.findUserIdByEmail(email));
     }
 }

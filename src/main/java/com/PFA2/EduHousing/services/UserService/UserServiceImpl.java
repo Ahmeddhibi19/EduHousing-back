@@ -4,6 +4,7 @@ import com.PFA2.EduHousing.exceptions.EntityNotFoundException;
 import com.PFA2.EduHousing.exceptions.ErrorCodes;
 import com.PFA2.EduHousing.model.User;
 import com.PFA2.EduHousing.repository.jpa.UserRepository;
+import com.PFA2.EduHousing.repository.mongo.MonGoUserRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,11 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
+    private final MonGoUserRepository monGoUserRepository;
     @Autowired
-    UserServiceImpl(UserRepository userRepository){
+    UserServiceImpl(UserRepository userRepository,MonGoUserRepository monGoUserRepository){
         this.userRepository=userRepository;
+        this.monGoUserRepository=monGoUserRepository;
     }
     @Override
     public Integer getUserId(UserDetails userDetails) {
@@ -47,12 +50,13 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public String deleteUserById(Integer id) {
-        if(id==null){
+    public String deleteUserById(Integer id,String mongoId) {
+        if(id==null || mongoId==null){
             log.error("user id is null !!");
             return "id is null";
         }
         userRepository.deleteUserById(id);
+        monGoUserRepository.deleteById(mongoId);
         return "user deleted successfully";
     }
 }

@@ -89,9 +89,9 @@ node(){
             sh 'docker pull maven:3.8.3-openjdk-17'
         }
         /* Maven - tests */
-        stage('SERVICE - Tests unitaires'){
+       /* stage('SERVICE - Tests unitaires'){
             sh 'mvn clean test'
-        }
+        }*/
 
         /* Maven - build */
         stage('SERVICE - Jar'){

@@ -96,7 +96,7 @@ node(){
         /* Maven - build */
         stage('SERVICE - Jar'){
             sh 'docker run --rm --name maven-${commitIdLong} -v /var/lib/jenkins/maven/:/root/.m2 -v "$(pwd)":/usr/src/mymaven --network generator_generator -w /usr/src/mymaven maven:3.8.3-openjdk-17 mvn -B clean install -DskipTests -DfinalName=app'
-
+            sh 'ls target'
         }
 
         /* Docker - build & push */
@@ -105,9 +105,10 @@ node(){
 
         stage('DOCKER - Build/Push registry'){
             docker.withRegistry('http://192.168.5.5:5000', 'myregistry_login') {
-                def customImage = docker.build("$imageName:${version}-${commitId}")
+                def customImage = docker.build("--verbose -t $imageName:${version}-${commitId}")
                 customImage.push()
             }
+            sh 'docker run --rm -it $imageName ls /app'
             sh "docker rmi $imageName:${version}-${commitId}"
         }
 

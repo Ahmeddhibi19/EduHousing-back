@@ -96,8 +96,9 @@ node(){
         /* Maven - build */
         stage('SERVICE - Jar'){
             sh 'docker run --rm --name maven-${commitIdLong} -v /var/lib/jenkins/maven/:/root/.m2 -v "$(pwd)":/usr/src/mymaven --network generator_generator -w /usr/src/mymaven maven:3.8.3-openjdk-17 mvn -B clean install'
-            sh 'chmod +x *.jar'
-            sh ' mv target/*.jar target/app.jar'
+            git "http://gitlab.example.com/pipeline/rename.git"
+            sh 'chmod +x rename.sh'
+            sh './rename.sh'
         }
 
         /* Docker - build & push */

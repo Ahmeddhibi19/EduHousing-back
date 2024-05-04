@@ -11,3 +11,4 @@ FROM openjdk:17-slim-buster
 CMD mkdir /jar
 COPY --FROM=build /app/target/*.jar /jar/
 EXPOSE 8080
+

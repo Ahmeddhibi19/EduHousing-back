@@ -1,6 +1,6 @@
 FROM alpine/git as clone
 WORKDIR /app
-RUN git clone http://gitlab.example.com/pipeline/eduhousingapp.git
+RUN git clone http://gitlab.example.com/pipeline/app.git
 
 FROM maven:3.8.3-openjdk-17-alpine as build
 WORKDIR /app

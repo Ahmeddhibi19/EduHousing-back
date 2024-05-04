@@ -95,7 +95,7 @@ node(){
 
         /* Maven - build */
         stage('SERVICE - Jar'){
-            sh 'docker run --rm --name maven-${commitIdLong} -v /var/lib/jenkins/maven/:/root/.m2 -v "$(pwd)":/usr/src/mymaven --network generator_generator -w /usr/src/mymaven maven:3.8.3-openjdk-17 mvn -B clean install -dskipTests -dfinalName=app'
+            sh 'docker run --rm --name maven-${commitIdLong} -v /var/lib/jenkins/maven/:/root/.m2 -v "$(pwd)":/usr/src/mymaven --network generator_generator -w /usr/src/mymaven maven:3.8.3-openjdk-17 mvn -B clean install -DskipTests -DfinalName=app'
             sh 'ls target'
         }
 

@@ -58,6 +58,7 @@ public class Admindto  {
                                 .name(admin.getProfileImage().getName())
                                 .data(ImageUtils.decompressImage(admin.getProfileImage().getData()))
                                 .build():null
+
                 )
                 .build();
     }

@@ -95,7 +95,7 @@ node(){
 
         /* Maven - build */
         stage('SERVICE - Jar'){
-            sh 'mvn -B clean install -DskipTests -DfinalName=app'
+            sh 'mvn -B clean install -DskipTests '
             sh 'ls target'
         }
 

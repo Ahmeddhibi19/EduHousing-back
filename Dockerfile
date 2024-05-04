@@ -2,6 +2,6 @@
 FROM openjdk:17-slim-buster
 CMD mkdir /jar
 COPY target/*.jar /jar/
-ENTRYPOINT ["java", "-jar", "/jar/*.jar"]
+ENTRYPOINT ["java", "-jar"]
 EXPOSE 8081
 

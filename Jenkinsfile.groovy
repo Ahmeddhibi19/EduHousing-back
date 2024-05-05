@@ -118,7 +118,18 @@ node(){
             }
         }
 
-
+        stage('ANSIBLE - Deploy'){
+            git branch: 'master', url: 'http://gitlab.example.com/pipeline/deploy-ansible.git'
+            sh "mkdir -p roles"
+            sh "ansible-galaxy install --roles-path roles -r requirements.yml"
+            ansiblePlaybook (
+                    colorized: true,
+                    playbook: "install-eduhousing.yml",
+                    hostKeyChecking: false,
+                    inventory: "env/${branchName}/hosts",
+                    extras: "-u vagrant -e 'image=$imageName:${version}-${commitId}' -e 'version=${version}'"
+            )
+        }
 
 
 

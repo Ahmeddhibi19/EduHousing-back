@@ -51,7 +51,7 @@ pipeline{
                 }
             }
         }
-        istage('SERVICE - Update Version') {
+        stage('SERVICE - Update Version') {
             steps {
                 script {
                     def branchName = env.BRANCH_NAME
@@ -110,19 +110,6 @@ pipeline{
                 sh 'curl -sk --user $USERNAME:$PASSWORD https://192.168.5.5:5000/v2/eduhousing/tags/list'
             }
         }
-        stage('ANSIBLE - Deploy'){
-            git branch: 'master', url: 'http://gitlab.example.com/pipeline/deploy-ansible.git'
-            sh "mkdir -p roles"
-            sh "ansible-galaxy install --roles-path roles -r requirements.yml"
-            ansiblePlaybook (
-                    colorized: true,
-                    playbook: "install-eduhousing.yml",
-                    hostKeyChecking: false,
-                    inventory: "env/${branchName}/hosts",
-                    extras: "-u vagrant -e 'image=$imageName:${version}-${commitId}' -e 'version=${version}'"
-            )
-        }
-
 
         stage('ANSIBLE - Deploy'){
             git branch: 'master',credentialsId: 'github-credentials-id', url: 'https://github.com/Ahmeddhibi19/deploy-ansible.git'

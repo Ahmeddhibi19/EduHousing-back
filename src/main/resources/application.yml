@@ -2,17 +2,16 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/eduhousing?createDatabaseIfNotExist=true&userSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT
     username: root
-    password: admin #admin
+    password: ${MYSQL_ROOT_PASSWORD} #admin
     driver-class-name: com.mysql.cj.jdbc.Driver
   data:
     mongodb:
-      username: ahmeddhibi
-      password: azerty456
+      username: ${MONGO_USERNAME}
+      password: ${MONGO_PASSWORD}
       host: localhost
       port: 27017
       database: Eduhousing_chat_app25
-      uri: mongodb://localhost:27017/Eduhousing_chat_app2 # Updated URI
-  ## Specify DBMS
+      uri: mongodb://localhost:27017/Eduhousing_chat_app2
   jpa:
     database: MYSQL
     show-sql: false
@@ -27,47 +26,14 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ahmeddhibi974@gmail.com
-    password: tizy wwfs tfzm omqw
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:
           auth: true
           starttls:
             enable: true
-  #web:
-    #resources:
-      #static-locations: classpath:/META-INF/resources/,classpath:/resources/static/,classpath:/static/,classpath:/public/
 
 server:
   port: 8081
-
-#springdoc:
-  #use-management-port: true
-  #packagesToScan: com.PFA2.EduHousing
-  #swagger-ui:
-    #path: /swagger-ui
-
-#management:
-  #endpoints:
-    #web:
-      #exposure:
-        #include: openapi, swagger-ui
-
-
-
-
-#localhost:3306/eduhousing?createDatabaseIfNotExist=true&userSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT
-#jdbc:mysql://mysql:3306/mydb?createDatabaseIfNotExist=true
-
-
-#    username: myuser
-#    password: password
-
-#    mongodb:
-#      username: admin # Updated username
-#      password: admin123 # Updated password
-#      host: mongo # Updated host to match the service name in Docker Compose
-#      port: 27017
-#      database: Eduhousing_chat_app25 # Ensure this matches your MongoDB database name
-#      uri: mongodb://admin:admin123@mongo:27017/Eduhousing_chat_app25

@@ -8,10 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
@@ -33,6 +30,8 @@ public class Apartmentdto {
     private String type;
 
     private Boolean isRented;
+
+    private Map<Integer, BigDecimal> distancesMap;
 
     private List<byte[]> imageList;
 
@@ -70,6 +69,12 @@ public class Apartmentdto {
                 .rating(apartment.getRating())
                 .isRented(apartment.getIsRented())
                 .imageList(imageList)
+                .distancesMap(
+                        apartment.getDistanceList().stream()
+                                .collect(Collectors.toMap(
+                                        distancedto -> distancedto.getCollege().getId(),
+                                        Distance::getDistanceValue
+                                )))
                 .homeowner(
                         apartment.getHomeowner()!=null?
                         Homeownerdto.builder()
@@ -78,6 +83,7 @@ public class Apartmentdto {
                                 .email(apartment.getHomeowner().getEmail())
                                 .firstName(apartment.getHomeowner().getFirstName())
                                 .lastName(apartment.getHomeowner().getLastName())
+                                .phoneNumber(apartment.getHomeowner().getPhoneNumber())
                                 .profileImage(ProfileImagedto.fromEntity(apartment.getHomeowner().getProfileImage()))
 
                         .build():null

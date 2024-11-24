@@ -186,6 +186,13 @@ public class RequestServiceImpl implements RequestService{
             throw new InvalidEntityException("there is all ready an accepted request",
                     ErrorCodes.ACCEPTED_REQUEST_ALL_READY_EXISTS);
         }
+        Optional<Request> existingValidatedRequest=requestRepository.getRequestsByValidationAndRentalDetailsId(rentalDetails.getId());
+        if(existingValidatedRequest.isPresent()){
+            log.error("there is all ready validated request");
+            throw new InvalidEntityException("there is all ready validated request",
+                    ErrorCodes.RENTAL_DETAILS_HAS_ALREADY_VALIDATED_REQUEST);
+        }
+
         Instant acceptanceTime = Instant.now();
         request.setStatus(Status.ACCEPTED);
         request.setAcceptanceTime(acceptanceTime);

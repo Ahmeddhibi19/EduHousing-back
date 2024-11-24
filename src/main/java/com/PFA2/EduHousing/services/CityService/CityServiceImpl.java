@@ -5,7 +5,9 @@ import com.PFA2.EduHousing.exceptions.EntityNotFoundException;
 import com.PFA2.EduHousing.exceptions.ErrorCodes;
 import com.PFA2.EduHousing.exceptions.InvalidEntityException;
 import com.PFA2.EduHousing.model.City;
+import com.PFA2.EduHousing.model.College;
 import com.PFA2.EduHousing.repository.jpa.CityRepository;
+import com.PFA2.EduHousing.repository.jpa.CollegeRepository;
 import com.PFA2.EduHousing.validator.CityValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +23,12 @@ import java.util.stream.Collectors;
 public class CityServiceImpl implements  CityService {
 
     private final CityRepository cityRepository;
+    private CollegeRepository collegeRepository;
 
     @Autowired
-    public CityServiceImpl(CityRepository cityRepository){
+    public CityServiceImpl(CityRepository cityRepository,CollegeRepository collegeRepository){
         this.cityRepository=cityRepository;
+        this.collegeRepository=collegeRepository;
     }
     @Override
     public Citydto save(Citydto citydto) {
@@ -141,5 +145,15 @@ public class CityServiceImpl implements  CityService {
         }
         cityRepository.deleteById(id);
 
+    }
+
+    @Override
+    public Integer getCityByCollegeId(Integer id) {
+        if(id==null){
+            log.error("city id is null !!");
+            return null;
+        }
+        Optional<College> college = collegeRepository.findById(id);
+        return college.get().getCity().getId();
     }
 }

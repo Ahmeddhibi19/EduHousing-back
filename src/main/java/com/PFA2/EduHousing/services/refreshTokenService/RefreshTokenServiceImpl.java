@@ -17,7 +17,7 @@ import java.util.UUID;
 @Service
 @Slf4j
 public class RefreshTokenServiceImpl implements RefreshTokenService{
-    private final RefreshTokenRepository refreshTokenRepository;
+    /*private final RefreshTokenRepository refreshTokenRepository;
     private final UserRepository userRepository;
 
     @Autowired
@@ -60,5 +60,5 @@ public class RefreshTokenServiceImpl implements RefreshTokenService{
             throw new RuntimeException(refreshToken.getToken()+"Refresh token expired. Please make a new sign in request");
         }
         return refreshToken;
-    }
+    }*/
 }

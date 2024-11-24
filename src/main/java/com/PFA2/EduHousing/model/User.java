@@ -1,6 +1,7 @@
 package com.PFA2.EduHousing.model;
 
 import com.PFA2.EduHousing.model.chat.ChatRoom;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -48,9 +49,9 @@ public class User extends AbstractEntity implements UserDetails {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private ApplicationFeedback applicationFeedback;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private RefreshToken refreshToken;
-
+  /*  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private RefreshToken refreshToken;*/
+    @JsonIgnore
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private ConfirmationToken confirmationToken;
 
@@ -93,4 +94,7 @@ public class User extends AbstractEntity implements UserDetails {
     public boolean isEnabled() {
         return false;
     }
+
+
+
 }

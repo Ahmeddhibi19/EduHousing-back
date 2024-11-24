@@ -63,4 +63,12 @@ public interface CityApi {
             @ApiResponse(responseCode = "400",description = "something went wrong !!!")
     })
     public void deleteById(@PathVariable("id") Integer id);
+
+    @GetMapping(value = APP_ROOT+"/city/find_college_id/{college_id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "search one city (postalCode/city_code)", description = "search city with the specified college id ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode  = "200",description = "city found"),
+            @ApiResponse(responseCode = "404",description = "city not found !!!")
+    })
+    public Integer findByCollegeId(@PathVariable("college_id") Integer collegeId);
 }

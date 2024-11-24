@@ -17,6 +17,7 @@ public interface CollegeService {
     public Collegedto update(Collegedto collegedto);
     public void deleteById(Integer id);
     public List<Collegedto> findCollegesByApartmentAndSameCity(Integer apartmentId);
+    public Integer getCollegeByStudentId(Integer id);
    /* public List<Collegedto> findCollegesByApartmentAndDistanceLessThan(Integer apartmentId, BigDecimal distanceValue);
     public List<Collegedto> findCollegesByApartmentAndCityAndDistanceLessThan(Integer apartmentId, BigDecimal distanceValue);*/
 }

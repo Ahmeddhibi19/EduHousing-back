@@ -71,4 +71,12 @@ public interface CollegeApi {
 
     })
     public List<Collegedto> findCollegesByApartmentAndSameCity(@PathVariable("apartment_id") Integer apartmentId);
+
+    @GetMapping(value = APP_ROOT+"/college/student/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "search college id", description = "search college id with the provided student id ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode  = "200",description = "college list found"),
+
+    })
+    public Integer findCollegesByStudentId(@PathVariable("id") Integer apartmentId);
 }

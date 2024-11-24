@@ -70,8 +70,8 @@ public class RentalFeedbackdto {
         rentalFeedback.setId(rentalFeedbackdto.getId());
         rentalFeedback.setContent(rentalFeedbackdto.getContent());
         rentalFeedback.setRating(rentalFeedbackdto.getRating());
-        rentalFeedback.setStudent(Studentdto.toEntity(rentalFeedbackdto.getStudent()));
-        rentalFeedback.setApartment(Apartmentdto.toEntity(rentalFeedbackdto.getApartment()));
+        /*rentalFeedback.setStudent(Studentdto.toEntity(rentalFeedbackdto.getStudent()));
+        rentalFeedback.setApartment(Apartmentdto.toEntity(rentalFeedbackdto.getApartment()));*/
         return rentalFeedback;
     }
 }

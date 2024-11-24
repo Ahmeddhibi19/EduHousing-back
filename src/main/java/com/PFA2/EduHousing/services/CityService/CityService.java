@@ -17,4 +17,5 @@ public interface CityService {
     public List<Citydto> findAll();
     public Citydto update(Citydto citydto);
     public void deleteById(Integer id);
+    public Integer getCityByCollegeId(Integer id);
 }

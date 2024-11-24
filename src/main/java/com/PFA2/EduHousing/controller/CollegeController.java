@@ -54,4 +54,9 @@ public class CollegeController implements CollegeApi {
     public List<Collegedto> findCollegesByApartmentAndSameCity(Integer apartmentId) {
         return collegeService.findCollegesByApartmentAndSameCity(apartmentId);
     }
+
+    @Override
+    public Integer findCollegesByStudentId(Integer id) {
+        return collegeService.getCollegeByStudentId(id);
+    }
 }

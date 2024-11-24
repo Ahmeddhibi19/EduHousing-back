@@ -1,6 +1,7 @@
 package com.PFA2.EduHousing.dto;
 
 import com.PFA2.EduHousing.model.Apartment;
+import com.PFA2.EduHousing.model.Distance;
 import com.PFA2.EduHousing.model.RentalDetails;
 import com.PFA2.EduHousing.model.Request;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -8,8 +9,11 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 
+import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -21,6 +25,7 @@ public class RentalDetailsdto {
 
     private Double monthlyAmount;
 
+    private Instant creationTime;
 
     private Date startDate;
 
@@ -37,6 +42,7 @@ public class RentalDetailsdto {
 
 
     private Apartmentdto apartment;
+    private Map<Integer, BigDecimal> distancesMap;
 
     public static RentalDetailsdto fromEntity(RentalDetails rentalDetails){
         if(rentalDetails==null){
@@ -47,6 +53,7 @@ public class RentalDetailsdto {
                 .monthlyAmount(rentalDetails.getMonthlyAmount())
                 .startDate(rentalDetails.getStartDate())
                 .endDate(rentalDetails.getEndDate())
+                .creationTime(rentalDetails.getCreationTime())
                 .description(rentalDetails.getDescription())
                 .isCurrent(rentalDetails.getIsCurrent())
                 .requestdtoSet(
@@ -80,7 +87,16 @@ public class RentalDetailsdto {
                                                 .name(rentalDetails.getApartment().getCity().getName())
                                                 .build()
                                 )
+
+
                                 .build()
+                )
+                .distancesMap(
+                        rentalDetails.getApartment().getDistanceList().stream()
+                                .collect(Collectors.toMap(
+                                        distancedto->distancedto.getCollege().getId(), // Assuming getCollege returns the College name
+                                        Distance::getDistanceValue // Assuming getDistanceValue returns the distance value
+                                ))
                 )
 
                 .build() ;

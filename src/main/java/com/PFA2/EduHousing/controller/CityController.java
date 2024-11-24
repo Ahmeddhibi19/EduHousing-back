@@ -47,4 +47,9 @@ public class CityController implements CityApi {
     public void deleteById(Integer id) {
         cityService.deleteById(id);
     }
+
+    @Override
+    public Integer findByCollegeId(Integer collegeId) {
+        return cityService.getCityByCollegeId(collegeId);
+    }
 }

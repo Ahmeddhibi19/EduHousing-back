@@ -53,10 +53,19 @@ public class RentalFeedbackServiceImpl implements RentalFeedbackService{
         }
         RentalFeedback rentalFeedback=RentalFeedbackdto.toEntity(rentalFeedbackdto);
         rentalFeedback.setApartment(apartment);
+        apartment.getRentalFeedbackSet().add(rentalFeedback);
         rentalFeedback.setStudent(student);
-        double currentRating = apartment.getRating() != null ? apartment.getRating() : 0.0;
+        student.getRentalFeedbackSet().add(rentalFeedback);
+        /*double currentRating = apartment.getRating() != null ? apartment.getRating() : 0.0;
         int feedbackCount = apartment.getRentalFeedbackSet().size();
         Double newRating = (currentRating * feedbackCount + rentalFeedback.getRating()) / (feedbackCount + 1);
+        apartment.setRating(newRating);*/
+        double newRating=0.0;
+        Integer sum=0;
+        for(RentalFeedback rental:apartment.getRentalFeedbackSet()){
+            sum+=rental.getRating();
+        }
+        newRating= ((double) sum) /apartment.getRentalFeedbackSet().size();
         apartment.setRating(newRating);
 
         return RentalFeedbackdto.fromEntity(rentalFeedbackRepository.save(rentalFeedback));

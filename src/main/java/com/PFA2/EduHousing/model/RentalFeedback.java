@@ -31,4 +31,16 @@ public class RentalFeedback extends AbstractEntity{
     @ManyToOne
     @JoinColumn(name = "student_id")
     private Student student;
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.getId() == null) ? 0 : this.getId().hashCode());
+        result = prime * result + ((content == null) ? 0 : content.hashCode());
+        result = prime * result + ((rating == null) ? 0 : rating.hashCode());
+        result = prime * result + ((apartment == null || apartment.getId() == null) ? 0 : apartment.getId().hashCode());
+        result = prime * result + ((student == null || student.getId() == null) ? 0 : student.getId().hashCode());
+        return result;
+    }
 }

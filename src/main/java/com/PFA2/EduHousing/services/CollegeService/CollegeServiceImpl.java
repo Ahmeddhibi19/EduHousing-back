@@ -5,14 +5,8 @@ import com.PFA2.EduHousing.dto.Distancedto;
 import com.PFA2.EduHousing.exceptions.EntityNotFoundException;
 import com.PFA2.EduHousing.exceptions.ErrorCodes;
 import com.PFA2.EduHousing.exceptions.InvalidEntityException;
-import com.PFA2.EduHousing.model.Apartment;
-import com.PFA2.EduHousing.model.City;
-import com.PFA2.EduHousing.model.College;
-import com.PFA2.EduHousing.model.Distance;
-import com.PFA2.EduHousing.repository.jpa.ApartmentRepository;
-import com.PFA2.EduHousing.repository.jpa.CityRepository;
-import com.PFA2.EduHousing.repository.jpa.CollegeRepository;
-import com.PFA2.EduHousing.repository.jpa.DistanceRepository;
+import com.PFA2.EduHousing.model.*;
+import com.PFA2.EduHousing.repository.jpa.*;
 import com.PFA2.EduHousing.validator.CollegeValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,18 +27,21 @@ public class CollegeServiceImpl implements CollegeService {
     private final DistanceRepository distanceRepository;
     private final CityRepository cityRepository;
     private final ApartmentRepository apartmentRepository;
+    private final StudentRepository studentRepository;
 
     @Autowired
     public CollegeServiceImpl(
             CollegeRepository collegeRepository,
             DistanceRepository distanceRepository,
             ApartmentRepository apartmentRepository,
-            CityRepository cityRepository
+            CityRepository cityRepository,
+            StudentRepository studentRepository
     ){
         this.collegeRepository=collegeRepository;
         this.distanceRepository=distanceRepository;
         this.apartmentRepository=apartmentRepository;
         this.cityRepository=cityRepository;
+        this.studentRepository=studentRepository;
     }
 
     @Override
@@ -178,6 +175,18 @@ public class CollegeServiceImpl implements CollegeService {
         return collegeRepository.findCollegesByApartmentAndSameCity(apartmentId).stream()
                 .map(Collegedto::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Integer getCollegeByStudentId(Integer id) {
+        if(id==null){
+            log.error("apartment id is null !!");
+            return null;
+        }
+        Student student= studentRepository.findById(id).orElseThrow(
+                ()-> new EntityNotFoundException("no student with this id :"+id,ErrorCodes.STUDENT_NOT_FOUND)
+        );
+        return student.getCollege().getId();
     }
 
   /*  @Override

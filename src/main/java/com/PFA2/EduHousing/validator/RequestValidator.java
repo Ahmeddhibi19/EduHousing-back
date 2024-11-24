@@ -14,12 +14,6 @@ public class RequestValidator {
         List<String> errors = new ArrayList<>();
         if(request==null){
             errors.add("require content");
-            errors.add("require acceptance delay");
-            errors.add("validation delay must be the end day of the rent");
-            errors.add("validation time must be after acceptance time");
-            errors.add("acceptance delay must be after validation time ");
-            errors.add("acceptance time,validation time,acceptance delay and validation delay must be after start date of the rent");
-            errors.add("acceptance time,validation time and acceptance delay must be before end date of the rent");
 
         }else {
             if(!StringUtils.hasLength(request.getContent())){

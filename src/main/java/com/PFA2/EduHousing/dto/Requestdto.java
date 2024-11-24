@@ -66,12 +66,6 @@ public class Requestdto {
                                                 .type(request.getRentalDetails().getApartment().getType())
                                                 .rating(request.getRentalDetails().getApartment().getRating())
                                                 .isRented(request.getRentalDetails().getApartment().getIsRented())
-                                                .images(
-                                                        request.getRentalDetails().getApartment()
-                                                                .getImageList().stream()
-                                                                .map(ApartmentImagedto::fromEntity)
-                                                                .collect(Collectors.toList())
-                                                )
                                                 .build()
                                 )
                                 .build()
@@ -82,13 +76,7 @@ public class Requestdto {
                                 .email(request.getStudent().getEmail())
                                 .firstName(request.getStudent().getFirstName())
                                 .lastName(request.getStudent().getLastName())
-                                .profileImage(
-                                        request.getStudent().getProfileImage()!=null?
-                                        ProfileImagedto.builder()
-                                                .id(request.getStudent().getProfileImage().getId())
-                                                .data(ImageUtils.decompressImage(request.getStudent().getProfileImage().getData()))
-                                                .build():null
-                                )
+
                                 .build()
                 )
                 .build();
@@ -107,8 +95,8 @@ public class Requestdto {
         request.setValidationTime(requestdto.getValidationTime());
         request.setAcceptanceDelay(requestdto.getAcceptanceDelay());
         request.setValidationDelay(requestdto.getValidationDelay());
-        request.setStudent(Studentdto.toEntity(requestdto.getStudent()));
-        request.setRentalDetails(RentalDetailsdto.toEntity(requestdto.getRentalDetails()));
+        /*request.setStudent(Studentdto.toEntity(requestdto.getStudent()));
+        request.setRentalDetails(RentalDetailsdto.toEntity(requestdto.getRentalDetails()));*/
         return request;
     }
 }

@@ -61,4 +61,26 @@ public class Apartment extends AbstractEntity{
     @OneToMany(mappedBy = "apartment", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<RentalFeedback> rentalFeedbackSet = new HashSet<>();
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.getId() == null) ? 0 : this.getId().hashCode());
+        result = prime * result + ((latitude == null) ? 0 : latitude.hashCode());
+        result = prime * result + ((longitude == null) ? 0 : longitude.hashCode());
+        result = prime * result + ((address == null) ? 0 : address.hashCode());
+        result = prime * result + ((description == null) ? 0 : description.hashCode());
+        result = prime * result + ((rating == null) ? 0 : rating.hashCode());
+        result = prime * result + ((type == null) ? 0 : type.hashCode());
+        result = prime * result + ((isRented == null) ? 0 : isRented.hashCode());
+        result = prime * result + ((homeowner == null || homeowner.getId() == null) ? 0 : homeowner.getId().hashCode());
+        result = prime * result + ((city == null || city.getId() == null) ? 0 : city.getId().hashCode());
+        result = prime * result + ((imageList == null) ? 0 : imageList.hashCode());
+        result = prime * result + ((rentalDetailsList == null) ? 0 : rentalDetailsList.hashCode());
+        result = prime * result + ((distanceList == null) ? 0 : distanceList.hashCode());
+        result = prime * result + ((favouritesSet == null) ? 0 : favouritesSet.hashCode());
+        return result;
+    }
+
+
 }

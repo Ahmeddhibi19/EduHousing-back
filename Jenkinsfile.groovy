@@ -1,97 +1,90 @@
-def project_token = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEF'
+pipeline{
+    agent any
+    tools {
+        jdk 'jdk17'
+        maven 'maven'
+        git 'Default'
+    }
+    triggers {
+        githubPush()
+    }
+    environment {
+        MYSQL_ROOT_PASSWORD = credentials('mysql-root-password')
+        MONGO_USERNAME= credentials('mongo-user-name')
+        MONGO_PASSWORD= credentials('mongo-password')
+        MAIL_USERNAME = credentials('mail-username')
+        MAIL_PASSWORD = credentials('mail-password')
+    }
+    stages{
 
-properties([
-        gitLabConnection('your-gitlab-connection-name'),
-        pipelineTriggers([
-                [
-                        $class: 'GitLabPushTrigger',
-                        branchFilterType: 'All',
-                        triggerOnPush: true,
-                        triggerOnMergeRequest: true,
-                        triggerOpenMergeRequestOnPush: "never",
-                        triggerOnNoteRequest: true,
-                        noteRegex: "Jenkins please retry a build",
-                        skipWorkInProgressMergeRequest: true,
-                        secretToken: project_token,
-                        ciSkip: false,
-                        setBuildDescription: true,
-                        addNoteOnMergeRequest: true,
-                        addCiMessage: true,
-                        addVoteOnMergeRequest: true,
-                        acceptMergeRequestOnSuccess: true,
-                        branchFilterType: "NameBasedFilter",
-                        includeBranchesSpec: "",
-                        excludeBranchesSpec: "",
-                ]
-        ])
-])
-
-
-node(){
-    try{
-        def buildNum = env.BUILD_NUMBER
-        def branchName= env.BRANCH_NAME
-
-        print buildNum
-        print branchName
-
-        stage('Env - clone generator'){
-            git "http://gitlab.example.com/pipeline/generator.git"
+        stage('Env - Clone Generator') {
+            steps {
+                git credentialsId: 'github-credentials-id', url: "https://github.com/Ahmeddhibi19/generator.git"
+            }
         }
 
         stage('Env - run mysql'){
-            sh "chmod +x generator.sh"
-            sh "./generator.sh -m"
-            sh "docker ps -a"
-
+            steps {
+                script {
+                    sh "chmod +x generator.sh"
+                    sh "./generator.sh -m '${env.MYSQL_ROOT_PASSWORD}'"
+                    sh "docker ps -a"
+                }
+            }
         }
         stage('Env - run mongo'){
-            sh "chmod +x generator.sh"
-            sh "./generator.sh -mn"
-            sh "docker ps -a"
+            steps {
+                script {
+                    sh "chmod +x generator.sh"
+                    sh "./generator.sh -n '${env.MONGO_USERNAME}' '${env.MONGO_PASSWORD}'"
+                    sh "docker ps -a"
+                }
+            }
 
         }
         /*get the app*/
-        stage('SERVICE - Git checkout'){
-            git branch: branchName, url:"http://gitlab.example.com/pipeline/app.git"
+        stage('SERVICE - Git Checkout') {
+            steps {
+                script {
+                    def branchName = env.BRANCH_NAME
+                    git branch: branchName, credentialsId: 'github-credentials-id', url: "https://github.com/Ahmeddhibi19/EduHousing-back.git"
+                }
+            }
         }
-        if(branchName =="dev"){
-            extension ="-SNAPSHOT"
-        }
-        if(branchName == "stage"){
-            extension = "-RC"
-        }
-        if(branchName == "master"){
-            extension = ""
+        istage('SERVICE - Update Version') {
+            steps {
+                script {
+                    def branchName = env.BRANCH_NAME
+                    def extension = "-SNAPSHOT"
+
+                    if (branchName == "stage") {
+                        extension = "-RC"
+                    } else if (branchName == "master") {
+                        extension = ""
+                    }
+
+                    sh "sed -i s/'-SNAPSHOT'/"${extension}"/g pom.xml"
+                }
+            }
         }
         /*Retrieving the long commitID*/
-        def commitIdLong = sh returnStdout: true, script: 'git rev-parse HEAD'
+        stage('SERVICE - Get Version and Commit ID') {
+            steps {
+                script {
+                    def commitIdLong = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
+                    def commitId = commitIdLong.take(7)
+                    def version = sh(returnStdout: true, script: "grep -A1 '<artifactId>EduHousing' pom.xml | tail -1 | perl -nle 'm{.*<version>(.*)</version>.*};print \$1' | tr -d '\n'").trim()
 
-        /*Retrieving the short commitID*/
-        def commitId = commitIdLong.take(7)
-
-        /*Changing the version in the pom.xml*/
-        sh "sed -i s/'-SNAPSHOT'/${extension}/g pom.xml"
-
-        /* Récupération de la version du pom.xml après modification */
-        def version = sh returnStdout: true, script: "cat pom.xml | grep -A1 '<artifactId>EduHousing' | tail -1 |perl -nle 'm{.*<version>(.*)</version>.*};print \$1' | tr -d '\n'"
-
-        print """
-         #################################################
-            BanchName: $branchName
-            CommitID: $commitId
-            AppVersion: $version
-            JobNumber: $buildNum
-         #################################################
-            """
-
-        stage('SERVICE - JDK'){
-            sh 'docker pull maven:3.8.3-openjdk-17'
+                    echo "BranchName: ${env.BRANCH_NAME}, CommitID: ${commitId}, AppVersion: ${version}, JobNumber: ${env.BUILD_NUMBER}"
+                }
+            }
         }
+
+
         /* Maven - tests */
-       /* stage('SERVICE - Tests unitaires'){
+        stage('SERVICE - Tests unitaires'){
             sh 'mvn clean test'
-        }*/
+        }
 
         /* Maven - build */
         stage('SERVICE - Jar'){
@@ -119,7 +112,8 @@ node(){
         }
 
         stage('ANSIBLE - Deploy'){
-            git branch: 'master', url: 'http://gitlab.example.com/pipeline/deploy-ansible.git'
+
+            git branch: 'master',credentialsId: 'github-credentials-id', url: 'https://github.com/Ahmeddhibi19/deploy-ansible.git'
             sh "mkdir -p roles"
             sh "ansible-galaxy install --roles-path roles -r requirements.yml"
             ansiblePlaybook (

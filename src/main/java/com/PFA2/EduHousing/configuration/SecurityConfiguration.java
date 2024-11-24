@@ -62,6 +62,7 @@ public class SecurityConfiguration  {
             "/api"+APP_ROOT+"/student/create/**",
             "/api"+APP_ROOT+"/college/findAll",
             "/api"+APP_ROOT+"/admin/total_number_user",
+            "/api"+APP_ROOT+"/city/find_college_id/**",
             "/ws/**",
             "/v2/api-docs",
             "/swagger-resources",
@@ -141,19 +142,20 @@ public class SecurityConfiguration  {
                                     )
                                     .requestMatchers("/api"+APP_ROOT+"/apartmentImages/homeowner/**").hasAnyRole(HOMEOWNER.name())
                                     .requestMatchers("/api"+APP_ROOT+"/college/admin/**").hasAnyRole(ADMIN.name())
+                                    .requestMatchers("/api"+APP_ROOT+"/college/student/**").hasAnyRole(STUDENT.name())
                                     .requestMatchers("/api"+APP_ROOT+"/favourites/student/**").hasAnyRole(STUDENT.name())
                                     .requestMatchers("/api"+APP_ROOT+"/homeowner/admin/**").hasAnyRole(ADMIN.name())
                                     .requestMatchers("/api"+APP_ROOT+"/homeowner/homeowner/**").hasAnyRole(HOMEOWNER.name())
                                     .requestMatchers("/api"+APP_ROOT+"/profileImage/admin/**").hasAnyRole(ADMIN.name())
                                     .requestMatchers("/api"+APP_ROOT+"/rentalDetails/homeowner/**").hasAnyRole(HOMEOWNER.name())
                                     .requestMatchers("/api"+APP_ROOT+"/rentalDetails/homeowner_admin/**").hasAnyRole(HOMEOWNER.name(),ADMIN.name())
-                                    .requestMatchers("/api"+APP_ROOT+"/rentalDetails/student/**").hasAnyAuthority(STUDENT_READ.name(),ADMIN_READ.name())
+                                    .requestMatchers("/api"+APP_ROOT+"/rentalDetails/student/**").hasAnyRole(STUDENT.name(),ADMIN.name())
                                     .requestMatchers("/api"+APP_ROOT+"/rentalfeedback/student/**").hasAnyRole(STUDENT.name())
                                     .requestMatchers("/api"+APP_ROOT+"/rentalfeedback/admin/**").hasAnyRole(ADMIN.name())
-                                    .requestMatchers("/api"+APP_ROOT+"/rentalfeedback/student_admin/**").hasAnyAuthority(STUDENT_READ.name(),ADMIN_READ.name())
-                                    .requestMatchers("/api"+APP_ROOT+"/request/student/**").hasAnyRole(STUDENT.name())
-                                    .requestMatchers("/api"+APP_ROOT+"request/admin_homeowner/**").hasAnyAuthority(ADMIN_READ.name(),HOMEOWNER_READ.name())
-                                    .requestMatchers("/api"+APP_ROOT+"/request/admin_student/**").hasAnyAuthority(ADMIN_READ.name(),STUDENT_READ.name())
+                                    .requestMatchers("/api"+APP_ROOT+"/rentalfeedback/student_admin/**").hasAnyRole(STUDENT.name(),ADMIN.name())
+                                    .requestMatchers("/api"+APP_ROOT+"/request/student/create/**").hasAnyRole(STUDENT.name())
+                                    .requestMatchers("/api"+APP_ROOT+"/request/admin_homeowner/**").hasAnyRole(HOMEOWNER.name(),ADMIN.name())
+                                    .requestMatchers("/api"+APP_ROOT+"/request/admin_student/**").hasAnyRole(STUDENT.name(),ADMIN.name())
                                     .requestMatchers("/api"+APP_ROOT+"/request/homeowner/**").hasAnyRole(HOMEOWNER.name())
                                     .requestMatchers("/api"+APP_ROOT+"/student/student/**").hasAnyRole(STUDENT.name())
                                     .requestMatchers("/api"+APP_ROOT+"/student/admin/**").hasAnyRole(ADMIN.name())

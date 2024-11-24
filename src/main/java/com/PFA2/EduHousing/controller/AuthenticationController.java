@@ -45,21 +45,21 @@ public class AuthenticationController {
         final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getLogin());
         //Integer id= userService.getUserId(userDetails);
         final String jwt=jwtUtils.generateToken((ExtendedUser)userDetails);
-        RefreshToken refreshToken= refreshTokenService.createRefreshToken(userDetails.getUsername());
+       // RefreshToken refreshToken= refreshTokenService.createRefreshToken(userDetails.getUsername());
         return ResponseEntity.ok(AuthenticationResponse.builder()
                 .accessToken(jwt)
-                .refreshToken(refreshToken.getToken())
+                //.refreshToken(refreshToken.getToken())
                 .build()
         );
     }
-    @PostMapping("/refresh_token")
+   /* @PostMapping("/refresh_token")
     public AuthenticationResponse refreshToken(@RequestBody RefreshTokendto refreshTokendto){
         return refreshTokenService.findByToken(refreshTokendto.getToken())
                 .map(refreshTokenService::verifyExpiration)
-                .map(RefreshToken::getUser)
+                //.map(RefreshToken::getUser)
                 .map(user -> {
-                    /*List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-                    authorities.add(new SimpleGrantedAuthority (user.getRole().toString()));*/
+                    *//*List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+                    authorities.add(new SimpleGrantedAuthority (user.getRole().toString()));*//*
                     ExtendedUser extendedUser= new ExtendedUser(user.getEmail(), user.getPassword(), user.getAuthorities());
                     String accessToken= jwtUtils.generateToken(extendedUser);
                     return AuthenticationResponse.builder()
@@ -69,5 +69,5 @@ public class AuthenticationController {
                 }).orElseThrow(
                         ()->new RuntimeException("Refresh token is not in data base")
                 );
-    }
+    }*/
 }

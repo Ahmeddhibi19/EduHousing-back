@@ -63,21 +63,21 @@ public interface RequestApi {
 
     })
     public List<Requestdto> getAllValidatedRequestsByStudentId(@PathVariable("student_id") Integer studentID);
-    @PutMapping(value = APP_ROOT+"/request/homeowner/accept/{request_id}/{rentalDetails_id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = APP_ROOT+"/request/homeowner/accept/{request_id}/{rentalDetails_id}",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "accpet one request", description = "accept request with the specified request ID and rental details id ")
     @ApiResponses(value = {
             @ApiResponse(responseCode  = "200",description = "request accepted successfully"),
             @ApiResponse(responseCode = "404",description = "something went wrong !!!")
     })
     public void acceptRequest(@PathVariable("request_id") Integer requestId,@PathVariable("rentalDetails_id") Integer rentalDetailsId);
-    @PutMapping(value = APP_ROOT+"/request/homeowner/removeacceptance/{request_id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = APP_ROOT+"/request/homeowner/removeacceptance/{request_id}",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "remove acceptance from one request", description = "remove acceptance from request with the specified request ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode  = "200",description = "acceptance removed successfully"),
             @ApiResponse(responseCode = "404",description = "something went wrong !!!")
     })
     public void removeAcceptance(@PathVariable("request_id") Integer requestId);
-    @PutMapping(value = APP_ROOT+"/request/homeowner/validate/{request_id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = APP_ROOT+"/request/homeowner/validate/{request_id}",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "validate one request", description = "validate request with the specified request ID and rental details id ")
     @ApiResponses(value = {
             @ApiResponse(responseCode  = "200",description = "request accepted successfully"),
@@ -98,7 +98,7 @@ public interface RequestApi {
             @ApiResponse(responseCode = "400",description = "something went wrong !!!")
     })
     public void deleteById(@PathVariable("id") Integer id);
-    @PutMapping(value = APP_ROOT+"/request/homeowner/reject/{request_id}/{rentalDetails_id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = APP_ROOT+"/request/homeowner/reject/{request_id}/{rentalDetails_id}",produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "reject one request", description = "reject request with the specified id and rental details id")
     @ApiResponses(value = {
             @ApiResponse(responseCode  = "200",description = "request rejected successfully"),

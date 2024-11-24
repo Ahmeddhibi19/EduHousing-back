@@ -24,15 +24,22 @@ pipeline{
         }
 
         stage('Env - run mysql'){
-            sh "chmod +x generator.sh"
-            sh "./generator.sh -m"
-            sh "docker ps -a"
-
+            steps {
+                script {
+                    sh "chmod +x generator.sh"
+                    sh "./generator.sh -m '${env.MYSQL_ROOT_PASSWORD}'"
+                    sh "docker ps -a"
+                }
+            }
         }
         stage('Env - run mongo'){
-            sh "chmod +x generator.sh"
-            sh "./generator.sh -mn"
-            sh "docker ps -a"
+            steps {
+                script {
+                    sh "chmod +x generator.sh"
+                    sh "./generator.sh -n '${env.MONGO_USERNAME}' '${env.MONGO_PASSWORD}'"
+                    sh "docker ps -a"
+                }
+            }
 
         }
         /*get the app*/
